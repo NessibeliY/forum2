@@ -1,0 +1,44 @@
+{{define "header"}}
+<header class="header">
+    <div class="offset">
+        <div class="header_wrapper">
+            <a class="logo" href="/">
+                <h2 class="text-4xl">FORUM</h2>
+            </a>
+                <div class="flex">
+                <form class="w-full flex items-center justify-center" action="/user/posts/" method="GET">
+                    <input type="hidden" name="filter" id="filter" value="all">
+                    {{if .IsAuth}}
+                        <button class="py-2 px-2 {{if eq .CurrentPage "all"}} text-blue-600{{else}}text-black{{end}} hover:text-blue-600  transition duration-300" id="allPost" type="submit" onclick="document.getElementById('filter').value='all'">All Posts</button>
+                        <button class="py-2 px-2 {{if eq .CurrentPage "my"}} text-blue-600{{else}}text-black{{end}} hover:text-blue-600 transition duration-300" id="allPost" type="submit" onclick="document.getElementById('filter').value='my'">My Posts</button>
+                        <button class="py-2 px-2 {{if eq .CurrentPage "liked"}} text-blue-600{{else}}text-black{{end}} hover:text-blue-600 transition duration-300" id="allPost" type="submit" onclick="document.getElementById('filter').value='liked'">Liked</button>
+                        <button class="py-2 px-2 {{if eq .CurrentPage "disliked"}} text-blue-600{{else}}text-black{{end}} hover:text-blue-600 transition duration-300" id="allPost" type="submit" onclick="document.getElementById('filter').value='disliked'">DisLiked</button>                                                    
+                    {{end}}
+                </form>
+                </div>
+            {{ if .IsAuth }}
+            <div class="flex">
+                <!-- <button class="flex items-center justify-center mr-2 cursor:pointer">
+                    <i class="fa-solid fa-gear text-2xl hover:text-blue-600  transition duration-300"></i>
+                </button> -->
+                <form method="POST" action="/log-out" class="flex items-center justify-center ml-2">
+                    <button class="flex items-center justify-center text-2xl hover:text-red-600  transition duration-300" type="submit">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </form>
+            </div>
+            {{else}}
+            <div class="auth_bnts">
+                <a class="bg-blue-500 hover:bg-blue-700 
+                transition duration-300 py-4 px-4 mr-2 rounded-lg text-white" href="/sign-in">
+                sign-in
+                </a>
+                <a class="bg-indigo-500 hover:bg-indigo-600 
+                transition duration-300 py-4 px-4 rounded-lg text-white" 
+                href="/sign-up">sign-up</a>
+            </div>
+            {{end}}
+        </div>
+    </div>
+</header>
+{{end}}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>{{.StatusCode}}</title>
+</head>
+<body>
+    <div class="main_container ">
+        <div class="flex items-center justify-center  flex-col min-h-screen">
+            <h1 class="text-8xl font-bold">{{ .StatusCode}}</h1>
+            <label class="mb-3 mt-3">{{.TextError}}</label>
+            <a href="/" class="py-2 px-2 text-2xl bg-black text-white mt-2 mb-2">Go Home</a>
+        </div>
+    </div>
+</body>
+</html>

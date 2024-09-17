@@ -1,0 +1,8 @@
+{
+    "port":"8080",
+    "store_path": "data.db",
+    "store_driver": "sqlite3",
+    "migration_path":"./migration/init.sql",
+    "version": "1.0.0",
+    "log_file": "forum.log"
+}

@@ -641,3 +641,18 @@ INFO: 2024/09/17 20:20:34 logger.go:38: html templates cached
 INFO: 2024/09/17 20:20:34 logger.go:38: connected to db
 INFO: 2024/09/17 20:25:36 logger.go:38: html templates cached
 INFO: 2024/09/17 20:25:36 logger.go:38: connected to db
+INFO: 2024/09/20 00:07:50 logger.go:38: html templates cached
+INFO: 2024/09/20 00:07:50 logger.go:38: connected to db
+ERROR: 2024/09/20 00:07:55 logger.go:43: check session in middleware http: named cookie not present
+ERROR: 2024/09/20 00:08:19 logger.go:43: check session in middleware http: named cookie not present
+INFO: 2024/09/20 00:08:19 logger.go:38: Page not found home page
+ERROR: 2024/09/20 00:08:34 logger.go:43: check session in middleware http: named cookie not present
+INFO: 2024/09/20 00:08:34 logger.go:38: Page not found home page
+ERROR: 2024/09/20 00:08:40 logger.go:43: check session in middleware http: named cookie not present
+INFO: 2024/09/20 00:08:40 logger.go:38: Page not found home page
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/09/20 00:17:42 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/09/20 00:17:42 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/09/20 00:32:49 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/09/20 00:32:49 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/09/20 00:33:04 logger.go:39: shutting down server... Reason: interrupt
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/09/20 00:33:04 logger.go:39: server gracefully stopped

@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"runtime"
 
 	"forum/internal/conf"
 )
@@ -28,17 +29,25 @@ func Setup(config *conf.Config) (*Logger, error) {
 	return l, nil
 }
 
+func (l *Logger) logWithCallerInfo(prefix string, v ...interface{}) {
+	_, file, line, ok := runtime.Caller(2)
+	if ok {
+		l.SetPrefix(fmt.Sprintf("%s %s:%d ", prefix, file, line))
+	} else {
+		l.SetPrefix(prefix)
+	}
+	l.Logger.Println(v...)
+}
+
 func (l *Logger) Fatal(v ...interface{}) {
-	l.SetPrefix("FATAL: ")
-	l.Logger.Fatal(v...)
+	l.logWithCallerInfo("FATAL:", v...)
+	os.Exit(1)
 }
 
 func (l *Logger) Info(v ...interface{}) {
-	l.SetPrefix("INFO: ")
-	l.Logger.Println(v...)
+	l.logWithCallerInfo("INFO:", v...)
 }
 
 func (l *Logger) Error(v ...interface{}) {
-	l.SetPrefix("ERROR: ")
-	l.Logger.Println(v...)
+	l.logWithCallerInfo("ERROR:", v...)
 }

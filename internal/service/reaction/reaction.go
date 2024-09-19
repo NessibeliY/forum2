@@ -1,49 +1,19 @@
 package reaction
 
 import (
-	"forum/internal/models"
-	"forum/internal/repository/reaction"
-
 	"github.com/gofrs/uuid"
+
+	"forum/internal/models"
 )
 
 type ReactionService struct {
-	ReactionRepo reaction.IReactionRepo
+	ReactionRepo models.ReactionRepository
 }
 
-func NewReactionService(reaction reaction.IReactionRepo) *ReactionService {
+func NewReactionService(reaction models.ReactionRepository) *ReactionService {
 	return &ReactionService{
 		ReactionRepo: reaction,
 	}
-}
-
-type IReactionService interface {
-	// delete reaction
-	DeleteReaction(post_id, user_id string) error
-	// like in post
-	CreateLikeInPost(like *models.Likes) error      // create like in post
-	LikeExistInPost(post_id, user_id string) bool   // check like exist in post
-	DeleteLikeInPost(post_id, user_id string) error // delete like in post
-	// dislike in post
-	CreateDislikeInPost(dislike *models.DisLike) error // create dislike in post
-	DisLikeExistInPost(post_id, user_id string) bool   // check dislike exist in post
-	DeleteDisLike(post_id, user_id string) error       // delete dislike in post
-	// comment
-	CreateCommentInPost(comment *models.Comment) error        // create comment in post
-	GetCommentsByID(post_id string) ([]models.Comment, error) // get comment list by POST ID
-	DeleteComment(comment_id string) error
-	// like in comment
-	CreateLikeInComment(reaction *models.CommentLike) error // create  like in comment
-	IncrementLikeInComment(comment_id string) error         // increment like in comment
-	DecrementLikeInComment(comment_id string) error         // decrement like in comment
-	ExistLikeInComment(user_id, comment_id string) bool     // check exist like in comment from current user
-	DeleteLikeInComment(comment_id, user_id string) error   // delete like in comment
-	// dislike in comment
-	CreateDisLikeInComment(reaction *models.CommentDisLike) error
-	IncrementDisLikeInComment(comment_id string) error     // increment dislike in comment
-	DecrementDisLikeInComment(comment_id string) error     // decrement dislike in comment
-	ExistDisLikeInComment(user_id, comment_id string) bool // check exist dislike in comment from current user
-	DeleteDisLikeInComment(comment_id, user_id string) error
 }
 
 func (r *ReactionService) DeleteReaction(post_id, user_id string) error {
@@ -77,14 +47,14 @@ func (r *ReactionService) DeleteReaction(post_id, user_id string) error {
 
 // LIKE
 // create new like
-func (r *ReactionService) CreateLikeInPost(like *models.Likes) error {
+func (r *ReactionService) CreateLikeInPost(like *models.Like) error {
 	// generate unique ID
 	id, err := uuid.NewV4()
 	if err != nil {
 		return models.ErrUUIDCreate
 	}
 	// new like
-	newReaction := &models.Likes{
+	newReaction := &models.Like{
 		LikeId: id.String(),
 		PostId: like.PostId,
 		UserId: like.UserId,
@@ -115,7 +85,7 @@ func (r *ReactionService) DeleteLikeInPost(post_id, user_id string) error {
 
 // DISLIKE
 // create new dislike
-func (r *ReactionService) CreateDislikeInPost(dislike *models.DisLike) error {
+func (r *ReactionService) CreateDislikeInPost(dislike *models.Dislike) error {
 	// generate unique ID
 	id, err := uuid.NewV4()
 	if err != nil {
@@ -123,7 +93,7 @@ func (r *ReactionService) CreateDislikeInPost(dislike *models.DisLike) error {
 	}
 
 	// new dislike
-	newReaction := &models.DisLike{
+	newReaction := &models.Dislike{
 		DisLikeId: id.String(),
 		PostId:    dislike.PostId,
 		UserId:    dislike.UserId,
@@ -259,14 +229,14 @@ func (r *ReactionService) DeleteLikeInComment(comment_id, user_id string) error 
 }
 
 // DISLIKE IN COMMENT
-func (r *ReactionService) CreateDisLikeInComment(reaction *models.CommentDisLike) error {
+func (r *ReactionService) CreateDisLikeInComment(reaction *models.CommentDislike) error {
 	// generate unique ID
 	id, err := uuid.NewV4()
 	if err != nil {
 		return models.ErrUUIDCreate
 	}
 
-	dislike := &models.CommentDisLike{
+	dislike := &models.CommentDislike{
 		DisLikeId: id.String(),
 		CommentId: reaction.CommentId,
 		UserId:    reaction.UserId,

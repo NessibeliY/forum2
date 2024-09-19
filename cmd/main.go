@@ -1,7 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"forum/internal/conf"
 	"forum/internal/handler"
@@ -34,12 +39,38 @@ func main() {
 		l.Fatal("init db: ", err)
 	}
 
-	repo := repository.NewRepo(l, db)
-	s := service.NewService(l, repo)
+	repo := repository.NewRepo(db)
+	s := service.NewService(repo)
 	handler := handler.NewHandler(l, s, tmplCache)
 	srv := server.NewServer(l)
 
-	if err := srv.RunServer("8082", handler.Routes()); err != nil {
-		l.Fatal("rror occured while running http server:", err.Error())
+	//to capture errors from the server
+	serverErrors := make(chan error, 1)
+
+	go func() {
+		serverErrors <- srv.RunServer("8082", handler.Routes())
+	}()
+
+	gracefulShutdown(l, srv, serverErrors)
+}
+
+func gracefulShutdown(l *logger.Logger, srv *server.Server, serverErrors <-chan error) {
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	select {
+	case err := <-serverErrors:
+		l.Error("server error: ", err)
+	case sig := <-quit:
+		l.Info("shutting down server... Reason:", sig)
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		defer cancel()
+
+		if err := srv.Shutdown(ctx); err != nil {
+			l.Error("server forced to shutdown:", err)
+		} else {
+			l.Info("server gracefully stopped")
+		}
 	}
 }

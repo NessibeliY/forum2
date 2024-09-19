@@ -41,6 +41,25 @@ type PostRepository interface {
 	GetCountPost() (int, error)
 }
 
+type PostService interface {
+	CreatePost(post *Post) error                         // create new post
+	Delete(post_id string) error                         // delete post by id
+	IncrementLike(post_id string) error                  // increment like in post
+	DecrementLike(post_id string) error                  // decrement like in post
+	IncrementDisLike(post_id string) error               // increment dislike in post
+	DecrementDisLike(post_id string) error               // decrement dislike in post
+	IncrementComment(post_id string) error               // increment comment count in post
+	DecrementComment(post_id string) error               // decrement comment count in post
+	GetPostList(postPerPage, offset int) ([]Post, error) // get all post
+	GetCategoryList() (*[]Categories, error)             // get all category
+	GetPostByName(username string) ([]Post, error)       // get post specified has user create
+	GetPostByLiked(user_id string) ([]Post, error)       // get list post specified user has liked
+	GetPostByDisLike(user_id string) ([]Post, error)     // get list post specified user has disliked
+	GetPostByTags(tag string) ([]Post, error)
+	GetPostByID(post_id string) (*Post, error) // get post by id
+	GetCountPost() (int, error)
+}
+
 type ResPostModel struct {
 	Posts    Post
 	Comments []Comment

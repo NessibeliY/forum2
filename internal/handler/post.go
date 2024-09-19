@@ -18,7 +18,7 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// get info about user
-	user, err := h.service.User.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		h.ErrorHandler(w, http.StatusUnauthorized, "Unauthorized\nPlease sign in or sign up")
 		return
@@ -28,7 +28,7 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	data := models.Login{IsAuth: true}
 
 	// categories/tags for post
-	categories, err := h.service.Post.GetCategoryList()
+	categories, err := h.service.PostService.GetCategoryList()
 	if err != nil {
 		data.Categories = nil
 	}
@@ -73,7 +73,7 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		data.Post.Tags = tags               // tags
 
 		if data.Error.Title == "" && data.Error.Tags == "" && data.Error.Description == "" {
-			err := h.service.Post.CreatePost(post) // create post
+			err := h.service.PostService.CreatePost(post) // create post
 			if err != nil {
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 				return
@@ -119,7 +119,7 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.User.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -129,27 +129,27 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postId")
 
 	// new like model
-	newLike := models.Likes{
+	newLike := models.Like{
 		PostId: postID,
 		UserId: user.ID,
 	}
 
-	existLike := h.service.Reaction.LikeExistInPost(postID, user.ID)
+	existLike := h.service.ReactionService.LikeExistInPost(postID, user.ID)
 	if !existLike {
-		err = h.service.Reaction.CreateLikeInPost(&newLike)
+		err = h.service.ReactionService.CreateLikeInPost(&newLike)
 		if err != nil {
 			fmt.Println(err)
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
 
-		err = h.service.Post.IncrementLike(postID)
+		err = h.service.PostService.IncrementLike(postID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
 
-		err = h.service.Reaction.DeleteDisLike(postID, user.ID)
+		err = h.service.ReactionService.DeleteDisLike(postID, user.ID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
@@ -173,7 +173,7 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.User.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -183,25 +183,25 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 	postID := r.FormValue("postId")
 
 	// new dislike
-	dislike := &models.DisLike{
+	dislike := &models.Dislike{
 		PostId: postID,
 		UserId: user.ID,
 	}
-	existDislike := h.service.Reaction.DisLikeExistInPost(postID, user.ID)
+	existDislike := h.service.ReactionService.DisLikeExistInPost(postID, user.ID)
 	if !existDislike {
-		err := h.service.Reaction.CreateDislikeInPost(dislike)
+		err := h.service.ReactionService.CreateDislikeInPost(dislike)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
 
-		err = h.service.Post.IncrementDisLike(postID)
+		err = h.service.PostService.IncrementDisLike(postID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
 
-		err = h.service.Reaction.DeleteLikeInPost(postID, user.ID)
+		err = h.service.ReactionService.DeleteLikeInPost(postID, user.ID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
@@ -229,7 +229,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 		} else {
 			data.IsAuth = true
 			// get user info
-			user, err := h.service.User.GetUserUserID(session.UserId)
+			user, err := h.service.UserService.GetUserUserID(session.UserId)
 			if err != nil {
 				h.logger.Info("Get user by id | Internal server error", "home page")
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -240,7 +240,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		categories, err := h.service.Post.GetCategoryList()
+		categories, err := h.service.PostService.GetCategoryList()
 		if err != nil {
 			h.logger.Info("Get categories/tags", "home page")
 			data.Categories = nil
@@ -250,7 +250,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 		comments := h.GetComment(post_id, data.UserName, data.Id)
 		data.Comment = comments
 
-		post, err := h.service.Post.GetPostByID(post_id)
+		post, err := h.service.PostService.GetPostByID(post_id)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 			return
@@ -271,7 +271,7 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodPost {
 		if ok {
-			user, err := h.service.User.GetUserUserID(session.UserId)
+			user, err := h.service.UserService.GetUserUserID(session.UserId)
 			if err != nil {
 				h.ErrorHandler(w, http.StatusUnauthorized, "Unauthorized")
 				return
@@ -292,14 +292,14 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 				CommentText: commentText,
 			}
 
-			err = h.service.Reaction.CreateCommentInPost(newComment)
+			err = h.service.ReactionService.CreateCommentInPost(newComment)
 			if err != nil {
 				h.logger.Error("Create Comment In Post", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
 
-			err = h.service.Post.IncrementComment(postID)
+			err = h.service.PostService.IncrementComment(postID)
 			if err != nil {
 				h.logger.Error("Increment Comment In Post", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -326,7 +326,7 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.User.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -335,7 +335,7 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 	commentId := r.FormValue("commentId")
 	postID := r.FormValue("PostId")
 
-	existLike := h.service.Reaction.ExistLikeInComment(user.ID, commentId)
+	existLike := h.service.ReactionService.ExistLikeInComment(user.ID, commentId)
 
 	if !existLike {
 		like := &models.CommentLike{
@@ -343,19 +343,19 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 			UserId:    user.ID,
 		}
 
-		err = h.service.Reaction.CreateLikeInComment(like)
+		err = h.service.ReactionService.CreateLikeInComment(like)
 		if err != nil {
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
 		}
 
-		err = h.service.Reaction.IncrementLikeInComment(commentId)
+		err = h.service.ReactionService.IncrementLikeInComment(commentId)
 		if err != nil {
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
 		}
 
-		err = h.service.Reaction.DeleteDisLikeInComment(commentId, user.ID)
+		err = h.service.ReactionService.DeleteDisLikeInComment(commentId, user.ID)
 		if err != nil {
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
@@ -377,7 +377,7 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.User.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -385,28 +385,28 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 
 	commentId := r.FormValue("commentId")
 	postID := r.FormValue("PostId")
-	existDisLike := h.service.Reaction.ExistDisLikeInComment(user.ID, commentId)
+	existDisLike := h.service.ReactionService.ExistDisLikeInComment(user.ID, commentId)
 
 	if !existDisLike {
-		disLike := &models.CommentDisLike{
+		disLike := &models.CommentDislike{
 			CommentId: commentId,
 			UserId:    user.ID,
 		}
 
-		err = h.service.Reaction.CreateDisLikeInComment(disLike)
+		err = h.service.ReactionService.CreateDisLikeInComment(disLike)
 		if err != nil {
 			fmt.Println("CREATE", err)
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
 		}
 
-		err = h.service.Reaction.IncrementDisLikeInComment(commentId)
+		err = h.service.ReactionService.IncrementDisLikeInComment(commentId)
 		if err != nil {
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
 		}
 
-		err = h.service.Reaction.DeleteLikeInComment(commentId, user.ID)
+		err = h.service.ReactionService.DeleteLikeInComment(commentId, user.ID)
 		if err != nil {
 			http.Error(w, "500", http.StatusInternalServerError)
 			return
@@ -429,7 +429,7 @@ func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.service.User.GetUserUserID(session.UserId)
+	_, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -437,14 +437,14 @@ func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	postId := r.FormValue("postId")
 
-	err = h.service.Post.Delete(postId)
+	err = h.service.PostService.Delete(postId)
 	if err != nil {
 		fmt.Println("error", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Sever error")
 		return
 	}
 
-	err = h.service.Reaction.DeleteReaction(postId, session.UserId)
+	err = h.service.ReactionService.DeleteReaction(postId, session.UserId)
 	if err != nil {
 		fmt.Println("error", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Sever error")
@@ -466,7 +466,7 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.service.User.GetUserUserID(session.UserId)
+	_, err := h.service.UserService.GetUserUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -476,13 +476,13 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	commentId := r.FormValue("CommentId")
 	postID := r.Form.Get("PostId")
 
-	err = h.service.Reaction.DeleteComment(commentId)
+	err = h.service.ReactionService.DeleteComment(commentId)
 	if err != nil {
 		http.Error(w, "500", http.StatusInternalServerError)
 		return
 	}
 
-	err = h.service.Post.DecrementComment(postID)
+	err = h.service.PostService.DecrementComment(postID)
 	if err != nil {
 		fmt.Println("error:", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")

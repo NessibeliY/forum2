@@ -9,7 +9,7 @@ import (
 
 func (h *Handler) CheckSession(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// get cokkie
+		// get cookie
 		c, err := r.Cookie(string(models.SessionKey))
 		if err != nil {
 			h.logger.Error("check session in middleware", err)
@@ -18,7 +18,7 @@ func (h *Handler) CheckSession(next http.Handler) http.HandlerFunc {
 		}
 
 		// get session
-		session, err := h.service.Session.GetSessionByToken(c.Value)
+		session, err := h.service.SessionService.GetSessionByToken(c.Value)
 		if err != nil {
 			h.logger.Error("Session not found in middleware", err)
 			next.ServeHTTP(w, r)

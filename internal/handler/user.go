@@ -8,13 +8,6 @@ import (
 	"forum/internal/validator"
 )
 
-// type IUserService interface {
-// 	CreateUser(user *models.User) error
-// 	GetUserByEmail(email string) (*models.User, error)
-// 	Login(email, password string) (*models.User, error)
-// 	GetUserUserID(id string) (*models.User, error)
-// }
-
 // REGISTER
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	data := models.UserData{IsAuth: false} // save data input from input
@@ -55,7 +48,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		data.Password = password
 
 		// check user is exist in db
-		existUser, _ := h.service.User.GetUserByEmail(data.Email)
+		existUser, _ := h.service.UserService.GetUserByEmail(data.Email)
 
 		// if email and username alredy exist
 		if existUser != nil {
@@ -70,7 +63,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 		// if errors is empty create user
 		if data.Errors.UserName == "" && data.Errors.Email == "" && data.Errors.Password == "" {
-			err := h.service.User.CreateUser(user)
+			err := h.service.UserService.CreateUser(user)
 			if err != nil {
 				http.Error(w, "INTERNAL SERVER ERROR", http.StatusBadRequest)
 				return
@@ -99,7 +92,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 		data.User.Password = r.Form.Get("password") // password
 
 		// check email and password for correctness
-		user, err := h.service.User.Login(data.User.Email, data.User.Password)
+		user, err := h.service.UserService.Login(data.User.Email, data.User.Password)
 		if err != nil {
 			if err == models.ErrUserNotFound {
 				data.Errors.Email = "Invalid email"
@@ -112,7 +105,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 
 			// delete session
 			// only one active session it's has
-			err = h.service.Session.DeleteSessionByUser(user.ID)
+			err = h.service.SessionService.DeleteSessionByUser(user.ID)
 			if err != nil {
 				fmt.Println("Err,", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
@@ -121,7 +114,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 
 			// after delete old session
 			// create new seesion
-			session, err := h.service.Session.CreateSession(user.ID, data.Errors.Email)
+			session, err := h.service.SessionService.CreateSession(user.ID, data.Errors.Email)
 			if err != nil {
 				http.Error(w, "Internal server error", http.StatusInternalServerError)
 				return

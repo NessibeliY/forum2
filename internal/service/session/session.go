@@ -3,28 +3,19 @@ package session
 import (
 	"time"
 
-	"forum/internal/models"
-	"forum/internal/repository/session"
-
 	"github.com/gofrs/uuid"
+
+	"forum/internal/models"
 )
 
 type SessionService struct {
-	SessionRepo session.ISessionRepo
+	SessionRepo models.SessionRepository
 }
 
-func NewSessionService(sessionRepo session.ISessionRepo) *SessionService {
+func NewSessionService(sessionRepo models.SessionRepository) *SessionService {
 	return &SessionService{
 		SessionRepo: sessionRepo,
 	}
-}
-
-type ISessionService interface {
-	CreateSession(userID, email string) (*models.Session, error)
-	GetSessionByToken(token string) (*models.Session, error)
-	IsSession(userID string) bool
-	GetSessionByUserId(user_id string) (*models.Session, error)
-	DeleteSessionByUser(user_id string) error
 }
 
 func (s *SessionService) CreateSession(userID, email string) (*models.Session, error) {

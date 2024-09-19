@@ -3,39 +3,19 @@ package post
 import (
 	"fmt"
 
-	"forum/internal/models"
-	"forum/internal/repository/post"
-
 	"github.com/gofrs/uuid"
+
+	"forum/internal/models"
 )
 
 type PostService struct {
-	PostRepo post.IPostRepo
+	PostRepo models.PostRepository
 }
 
-func NewPostService(postRepo post.IPostRepo) *PostService {
+func NewPostService(postRepo models.PostRepository) *PostService {
 	return &PostService{
 		PostRepo: postRepo,
 	}
-}
-
-type IPostService interface {
-	CreatePost(post *models.Post) error                         // create new post
-	Delete(post_id string) error                                // delete post by id
-	IncrementLike(post_id string) error                         // increment like in post
-	DecrementLike(post_id string) error                         // decrement like in post
-	IncrementDisLike(post_id string) error                      // increment dislike in post
-	DecrementDisLike(post_id string) error                      // decrement dislike in post
-	IncrementComment(post_id string) error                      // increment comment count in post
-	DecrementComment(post_id string) error                      // decrement comment count in post
-	GetPostList(postPerPage, offset int) ([]models.Post, error) // get all post
-	GetCategoryList() (*[]models.Categories, error)             // get all category
-	GetPostByName(username string) ([]models.Post, error)       // get post specified has user create
-	GetPostByLiked(user_id string) ([]models.Post, error)       // get list post specified user has liked
-	GetPostByDisLike(user_id string) ([]models.Post, error)     // get list post specified user has disliked
-	GetPostByTags(tag string) ([]models.Post, error)
-	GetPostByID(post_id string) (*models.Post, error) // get post by id
-	GetCountPost() (int, error)
 }
 
 func (p *PostService) GetPostByTags(tag string) ([]models.Post, error) {

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -29,4 +30,9 @@ func (s *Server) RunServer(port string, handler http.Handler) error {
 		return err
 	}
 	return nil
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	fmt.Println("gracefully shutting down server...")
+	return s.httpServer.Shutdown(ctx)
 }

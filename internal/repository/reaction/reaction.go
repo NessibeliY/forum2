@@ -17,39 +17,9 @@ func NewReactionRepo(db *sql.DB) *ReactionRepo {
 	}
 }
 
-type IReactionRepo interface {
-	// like in post
-	InsertLikePost(like *models.Likes) error      // insert new like
-	LikeExistInPost(post_id, user_id string) bool // check like current post from user
-	DeleteLike(post_id, user_id string) error     // delete like
-	// dislike in post
-	InsertDisLikePost(disLike *models.DisLike) error // insert new dislike
-	DisLikeExistInPost(post_id, user_id string) bool // check dislike current post from user
-	DeleteDisLike(post_id, user_id string) error     // delete dislike
-	// comments in post
-	InsertCommentInPost(comment *models.Comment) error   // insert new comment
-	GetCommentsByID(id string) ([]models.Comment, error) // get comment list by post_id
-	DeleteComment(comment_id string) error               // delete comment
-	DeleteCommentByPostID(post_id string) error          // delete comment by POST ID
-	// like in comment
-	InsertLikeInComment(reaction *models.CommentLike) error // insert new like in comment
-	IncrementLikeInComment(comment_id string) error         // increment like in comment
-	DecrementLikeInComment(comment_id string) error         // decrement like in comment
-	ExistLikeInComment(user_id, comment_id string) bool     // check exist like in comment from current user
-	DeleteLikeInComment(comment_id, user_id string) error   // delete dislike in comment
-	DeleteLikeInCommentByUserID(user_id string) error       // delete Like In Comment By Post ID
-	// dislike in comment
-	InsertDisLikeInComment(reaction *models.CommentDisLike) error // insert dislike in comment
-	IncrementDisLikeInComment(comment_id string) error            // increment dislike in comment
-	DecrementDisLikeInComment(comment_id string) error            // decrement dislike in comment
-	ExistDisLikeInComment(user_id, comment_id string) bool        // check exist dislike in comment from current user
-	DeleteDisLikeInComment(comment_id, user_id string) error
-	DeleteDisLikeInCommentByUserID(user_id string) error
-}
-
 // LIKE IN POST
 // insert like in DB
-func (r *ReactionRepo) InsertLikePost(like *models.Likes) error {
+func (r *ReactionRepo) InsertLikePost(like *models.Like) error {
 	stmt := `INSERT INTO likes(like_id,post_id,user_id,created_at)VALUES(?,?,?,datetime('now','localtime'))`
 	if _, err := r.db.Exec(stmt, like.LikeId, like.PostId, like.UserId); err != nil {
 		return models.ErrNotCreated
@@ -80,7 +50,7 @@ func (r *ReactionRepo) DeleteLike(post_id, user_id string) error {
 
 // DISLIKE IN POST
 // insert dislike in post
-func (r *ReactionRepo) InsertDisLikePost(disLike *models.DisLike) error {
+func (r *ReactionRepo) InsertDisLikePost(disLike *models.Dislike) error {
 	stmt := `INSERT INTO dislikes(dislike_id,post_id,user_id,created_at)VALUES(?,?,?,datetime('now','localtime'))`
 	if _, err := r.db.Exec(stmt, disLike.DisLikeId, disLike.PostId, disLike.UserId); err != nil {
 		return models.ErrNotCreated
@@ -216,7 +186,7 @@ func (r *ReactionRepo) DeleteLikeInCommentByUserID(user_id string) error {
 }
 
 // DISLIKE IN COMMENT
-func (r *ReactionRepo) InsertDisLikeInComment(reaction *models.CommentDisLike) error {
+func (r *ReactionRepo) InsertDisLikeInComment(reaction *models.CommentDislike) error {
 	stmt := `INSERT INTO comment_dislike (dislike_id,comment_id,user_id,created_at) VALUES (?,?,?,datetime('now','localtime'))`
 	if _, err := r.db.Exec(stmt, reaction.DisLikeId, reaction.CommentId, reaction.UserId); err != nil {
 		fmt.Println(err)

@@ -16,13 +16,6 @@ func NewSessionRepo(db *sql.DB) *SessionRepo {
 	}
 }
 
-type ISessionRepo interface {
-	Insert(sessiong models.Session) error
-	DeleteSessionByUser(user_id string) error
-	GetSessionById(user_id string) (*models.Session, error)
-	GetSessionByToken(token string) (*models.Session, error)
-}
-
 // insert new session in DB
 func (s *SessionRepo) Insert(session models.Session) error {
 	stmt := `INSERT INTO session(session_id,user_id,token,expire_time)VALUES(?,?,?,?)`
@@ -40,7 +33,6 @@ func (s *SessionRepo) DeleteSessionByUser(user_id string) error {
 	return nil
 }
 
-// get session by id
 func (s *SessionRepo) GetSessionById(user_id string) (*models.Session, error) {
 	var session models.Session
 	stmt := `SELECT * FROM session WHERE user_id = ?`
@@ -56,7 +48,6 @@ func (s *SessionRepo) GetSessionById(user_id string) (*models.Session, error) {
 	return &session, nil
 }
 
-// get session by token
 func (u *SessionRepo) GetSessionByToken(token string) (*models.Session, error) {
 	var session models.Session
 	stmt := `SELECT * FROM session WHERE token = ?`

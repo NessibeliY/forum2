@@ -37,7 +37,7 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 
 	postsPerPage := 10
 
-	totalPosts, err := h.service.Post.GetCountPost()
+	totalPosts, err := h.service.PostService.GetCountPost()
 	if err != nil {
 		h.logger.Info("Error fetching total post count", "home page")
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -50,7 +50,7 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	offset := (page - 1) * postsPerPage
 	var posts []models.Post
 	// get all post
-	posts, err = h.service.Post.GetPostList(postsPerPage*totalPages, offset)
+	posts, err = h.service.PostService.GetPostList(postsPerPage*totalPages, offset)
 	if err != nil {
 		posts = []models.Post{}
 	}
@@ -63,7 +63,7 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 
 		data.IsAuth = true
 		// get user info
-		user, err := h.service.User.GetUserUserID(s.UserId)
+		user, err := h.service.UserService.GetUserUserID(s.UserId)
 		if err != nil {
 			h.logger.Info("Get user by id | Internal server error", "home page")
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -75,7 +75,7 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// get tags list
-	categories, err := h.service.Post.GetCategoryList()
+	categories, err := h.service.PostService.GetCategoryList()
 	if err != nil {
 		h.logger.Info("Get categories/tags", "home page")
 		data.Categories = nil
@@ -106,7 +106,7 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 
 	filter := r.URL.Query().Get("filter")
 	var posts []models.Post
-	posts, err := h.service.Post.GetPostByTags(filter)
+	posts, err := h.service.PostService.GetPostByTags(filter)
 	if err != nil {
 		h.logger.Info("Get post by tags", "UserPost handler")
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -120,15 +120,15 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 	} else {
 		data.IsAuth = true
 
-		user, _ := h.service.User.GetUserUserID(s.UserId) // get user info
-		data.UserName = user.UserName                     // set username
-		data.Id = s.UserId                                // set user id
+		user, _ := h.service.UserService.GetUserUserID(s.UserId) // get user info
+		data.UserName = user.UserName                            // set username
+		data.Id = s.UserId                                       // set user id
 
 		switch filter {
 		case "all":
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		case "my":
-			posts, err = h.service.Post.GetPostByName(user.UserName)
+			posts, err = h.service.PostService.GetPostByName(user.UserName)
 			data.CurrentPage = "my"
 			if err != nil {
 				h.logger.Info("Get post by user name - 'my'", "UserPost Handler", err)
@@ -137,7 +137,7 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 				// fmt.Println(err)
 			}
 		case "liked":
-			posts, err = h.service.Post.GetPostByLiked(user.ID)
+			posts, err = h.service.PostService.GetPostByLiked(user.ID)
 			data.CurrentPage = "liked"
 			if err != nil {
 				h.logger.Info("Get post by user name - 'liked'", "UserPost Handler", err)
@@ -145,7 +145,7 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		case "disliked":
-			posts, err = h.service.Post.GetPostByDisLike(user.ID)
+			posts, err = h.service.PostService.GetPostByDisLike(user.ID)
 			data.CurrentPage = "disliked"
 			if err != nil {
 				h.logger.Info("Get post by user name - 'disliked'", "UserPost Handler", err)
@@ -157,8 +157,8 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	categories, _ := h.service.Post.GetCategoryList() // get tags list
-	data.Categories = *categories                     // set tags
+	categories, _ := h.service.PostService.GetCategoryList() // get tags list
+	data.Categories = *categories                            // set tags
 
 	// get post and comment
 	data.Posts = h.ResponseData(posts, data.UserName, data.Id)

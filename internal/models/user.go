@@ -48,6 +48,13 @@ type UserRepository interface {
 	GetUserUserID(id string) (*User, error)
 }
 
+type UserService interface {
+	CreateUser(user *User) error
+	GetUserByEmail(email string) (*User, error)
+	Login(email, password string) (*User, error)
+	GetUserUserID(id string) (*User, error)
+}
+
 type ErrorMessage struct {
 	Email       string
 	UserName    string

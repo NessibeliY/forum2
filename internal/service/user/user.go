@@ -26,13 +26,6 @@ func NewUserService(userRepo UserRepo) *UserService {
 	}
 }
 
-type IUserService interface {
-	CreateUser(user *models.User) error
-	GetUserByEmail(email string) (*models.User, error)
-	Login(email, password string) (*models.User, error)
-	GetUserUserID(id string) (*models.User, error)
-}
-
 // create new user
 func (u *UserService) CreateUser(user *models.User) error {
 	// check user is not nil

@@ -7,7 +7,7 @@ import (
 	"forum/internal/models"
 )
 
-func (h *Handler) CheckSession(next http.Handler) http.HandlerFunc {
+func (h *Handler) SessionAuthMiddleware(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// get cookie
 		c, err := r.Cookie(string(models.SessionKey))
@@ -17,7 +17,6 @@ func (h *Handler) CheckSession(next http.Handler) http.HandlerFunc {
 			return
 		}
 
-		// get session
 		session, err := h.service.SessionService.GetSessionByToken(c.Value)
 		if err != nil {
 			h.logger.Error("Session not found in middleware", err)
@@ -25,7 +24,6 @@ func (h *Handler) CheckSession(next http.Handler) http.HandlerFunc {
 			return
 		}
 
-		// context
 		ctx := context.WithValue(r.Context(), models.SessionKey, *session)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

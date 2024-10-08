@@ -23,47 +23,41 @@ type Post struct {
 }
 
 type PostRepository interface {
-	GetPostList(postPerPage, offset int) ([]Post, error) //  get all post
-	Insert(post Post) error                              // insert new post
-	Delete(post_id string) error                         // delete post
-	IncrementLike(post_id string) error                  // increment like in post
-	DecrementLike(post_id string) error                  // decrement like in post
-	IncrementDisLike(post_id string) error               // increment like in post
-	DecrementDisLike(post_id string) error               // decrement dislike in post
-	IncrementComment(post_id string) error               // increment comment count in post
-	DecrementComment(post_id string) error               // decrement comment count in post
-	GetCategoryList() (*[]Categories, error)             // get all category/tags
-	GetPostByName(username string) ([]Post, error)       // get list post specified user has create
-	GetPostByLiked(user_id string) ([]Post, error)       // get list post specified user has liked
-	GetPostByDislike(user_id string) ([]Post, error)     // get list post specified user has disliked
-	GetPostByTags(tag string) ([]Post, error)            // get post list by tag
-	GetPostByID(post_id string) (*Post, error)           // get post by id
-	GetCountPost() (int, error)
+	GetAllPosts(postPerPage, offset int) ([]Post, error)
+	AddPost(post Post) error // insert new post
+	DeletePostByPostID(post_id string) error
+	IncrementLikeCount(post_id string) error
+	DecrementLikeCount(post_id string) error
+	IncrementDislikeCount(post_id string) error
+	DecrementDislikeCount(post_id string) error
+	IncrementCommentCount(post_id string) error
+	DecrementCommentCount(post_id string) error
+	GetAllCategories() (*[]Categories, error)
+	GetPostsByUsername(username string) ([]Post, error)
+	GetPostsLikedByUser(user_id string) ([]Post, error)
+	GetPostsDislikedByUser(user_id string) ([]Post, error)
+	GetPostsByCategory(tag string) ([]Post, error)
+	GetPostByPostID(post_id string) (*Post, error)
+	GetPostsCount() (int, error)
 }
 
 type PostService interface {
-	CreatePost(post *Post) error                         // create new post
-	Delete(post_id string) error                         // delete post by id
-	IncrementLike(post_id string) error                  // increment like in post
-	DecrementLike(post_id string) error                  // decrement like in post
-	IncrementDisLike(post_id string) error               // increment dislike in post
-	DecrementDisLike(post_id string) error               // decrement dislike in post
-	IncrementComment(post_id string) error               // increment comment count in post
-	DecrementComment(post_id string) error               // decrement comment count in post
-	GetPostList(postPerPage, offset int) ([]Post, error) // get all post
-	GetCategoryList() (*[]Categories, error)             // get all category
-	GetPostByName(username string) ([]Post, error)       // get post specified has user create
-	GetPostByLiked(user_id string) ([]Post, error)       // get list post specified user has liked
-	GetPostByDisLike(user_id string) ([]Post, error)     // get list post specified user has disliked
-	GetPostByTags(tag string) ([]Post, error)
-	GetPostByID(post_id string) (*Post, error) // get post by id
-	GetCountPost() (int, error)
-}
-
-type ResPostModel struct {
-	Posts    Post
-	Comments []Comment
-	OwnerId  string
+	CreatePost(createPostRequest *CreatePostRequest) error
+	DeletePostByPostID(post_id string) error
+	IncrementLikeCount(post_id string) error
+	DecrementLikeCount(post_id string) error
+	IncrementDislikeCount(post_id string) error
+	DecrementDislikeCount(post_id string) error
+	IncrementCommentCount(post_id string) error
+	DecrementCommentCount(post_id string) error
+	GetAllPosts(postPerPage, offset int) ([]Post, error)
+	GetAllCategories() (*[]Categories, error)
+	GetPostsByUsername(username string) ([]Post, error)
+	GetPostsLikedByUser(user_id string) ([]Post, error)
+	GetPostsDislikedByUser(user_id string) ([]Post, error)
+	GetPostsByCategory(tag string) ([]Post, error)
+	GetPostByPostID(post_id string) (*Post, error)
+	GetPostsCount() (int, error)
 }
 
 type Posts struct {
@@ -91,8 +85,22 @@ func ValidateTags(v *validator.Validator, tags []string) {
 	v.Check(len(tags) > 0, "tags", "Tags is required")
 }
 
-func ValidatePost(v *validator.Validator, post *Post) {
-	ValidateTitle(v, post.Title)
-	ValidateDescription(v, post.Description)
-	ValidateTags(v, post.Tags)
+func ValidateCreatePostRequest(v *validator.Validator, createPostRequest *CreatePostRequest) {
+	ValidateTitle(v, createPostRequest.Title)
+	ValidateDescription(v, createPostRequest.Description)
+	ValidateTags(v, createPostRequest.Tags)
+}
+
+type CreatePostRequest struct {
+	UserID      string
+	Author      string
+	Title       string
+	Description string
+	Tags        []string
+}
+
+type UserPostsResponse struct {
+	Posts    Post
+	Comments []Comment
+	OwnerId  string
 }

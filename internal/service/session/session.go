@@ -18,20 +18,31 @@ func NewSessionService(sessionRepo models.SessionRepository) *SessionService {
 	}
 }
 
-func (s *SessionService) CreateSession(userID, email string) (*models.Session, error) {
-	// generate unique id for session
+func (s *SessionService) SetSession(userID string) (*models.Session, error) {
+	err := s.SessionRepo.DeleteSessionByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	session, err := s.createSession(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return session, nil
+}
+
+func (s *SessionService) createSession(userID string) (*models.Session, error) {
 	id, err := uuid.NewV4()
 	if err != nil {
 		return nil, err
 	}
 
-	// generate token for session
 	token, err := uuid.NewV4()
 	if err != nil {
 		return nil, err
 	}
 
-	// expire time for session
 	expire_time := time.Now().Add(time.Hour * 2)
 	session := models.Session{
 		SessionId:  id.String(),
@@ -40,7 +51,7 @@ func (s *SessionService) CreateSession(userID, email string) (*models.Session, e
 		ExpireTime: expire_time,
 	}
 
-	if err = s.SessionRepo.Insert(session); err != nil {
+	if err = s.SessionRepo.AddSession(session); err != nil {
 		return nil, err
 	}
 
@@ -59,15 +70,6 @@ func (s *SessionService) GetSessionByToken(token string) (*models.Session, error
 	return session, nil
 }
 
-func (s *SessionService) IsSession(userID string) bool {
-	_, err := s.SessionRepo.GetSessionById(userID)
-	if err != nil {
-		return false
-	}
-
-	return true
-}
-
 func (s *SessionService) GetSessionByUserId(user_id string) (*models.Session, error) {
 	session, err := s.SessionRepo.GetSessionById(user_id)
 	if err != nil {
@@ -75,13 +77,4 @@ func (s *SessionService) GetSessionByUserId(user_id string) (*models.Session, er
 	}
 
 	return session, err
-}
-
-func (s *SessionService) DeleteSessionByUser(user_id string) error {
-	err := s.SessionRepo.DeleteSessionByUser(user_id)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

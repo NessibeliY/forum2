@@ -17,7 +17,7 @@ func NewSessionRepo(db *sql.DB) *SessionRepo {
 }
 
 // insert new session in DB
-func (s *SessionRepo) Insert(session models.Session) error {
+func (s *SessionRepo) AddSession(session models.Session) error {
 	stmt := `INSERT INTO session(session_id,user_id,token,expire_time)VALUES(?,?,?,?)`
 	if _, err := s.db.Exec(stmt, session.SessionId, session.UserId, session.Token, session.ExpireTime); err != nil {
 		return err
@@ -25,7 +25,7 @@ func (s *SessionRepo) Insert(session models.Session) error {
 	return nil
 }
 
-func (s *SessionRepo) DeleteSessionByUser(user_id string) error {
+func (s *SessionRepo) DeleteSessionByUserID(user_id string) error {
 	stmt := `DELETE FROM session WHERE user_id = ?`
 	if _, err := s.db.Exec(stmt, user_id); err != nil {
 		return err

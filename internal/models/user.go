@@ -14,6 +14,7 @@ const (
 )
 
 var (
+	ErrUserExists                   = errors.New("user already exists")
 	ErrNotFound               error = errors.New("error: Not found")
 	ErrUserNotFound           error = errors.New("user not found")
 	ErrWrongPassword          error = errors.New("wrong password")
@@ -43,16 +44,34 @@ type User struct {
 }
 
 type UserRepository interface {
-	Insert(user User) error
+	AddUser(user User) error
 	GetUserByEmail(email string) (*User, error)
-	GetUserUserID(id string) (*User, error)
+	GetUserByUserID(id string) (*User, error)
 }
 
 type UserService interface {
-	CreateUser(user *User) error
-	GetUserByEmail(email string) (*User, error)
+	SignUpUser(signupRequest *SignupRequest) error
 	Login(email, password string) (*User, error)
-	GetUserUserID(id string) (*User, error)
+	GetUserByUserID(id string) (*User, error)
+}
+
+type SignupRequest struct {
+	UserName      string
+	Email         string
+	Password      string
+	ErrorMessages ErrorMessage
+	IsAuth        bool
+}
+
+type LoginRequest struct {
+	User          AuthData
+	ErrorMessages ErrorMessage
+	IsAuth        bool
+}
+
+type AuthData struct {
+	Email    string
+	Password string
 }
 
 type ErrorMessage struct {
@@ -62,25 +81,6 @@ type ErrorMessage struct {
 	Title       string
 	Description string
 	Tags        string
-}
-
-type UserData struct {
-	UserName string
-	Email    string
-	Password string
-	Errors   ErrorMessage
-	IsAuth   bool
-}
-
-type AuthData struct {
-	Email    string
-	Password string
-}
-
-type LoginData struct {
-	User   AuthData
-	Errors ErrorMessage
-	IsAuth bool
 }
 
 func ValidateEmail(v *validator.Validator, email string) {
@@ -94,7 +94,7 @@ func ValidatePassword(v *validator.Validator, password string) {
 	v.Check(v.ValidPassword(password), "password", "password must be contain 1 upper character,1 lower character and 1 digit")
 }
 
-func ValidateUser(v *validator.Validator, u *User) {
+func ValidateSignupRequest(v *validator.Validator, u *SignupRequest) {
 	v.Check(u.UserName != "", "username", "must be provided")
 	v.Check(len(u.UserName) > 3, "username", "username must be at least 3 characters long")
 

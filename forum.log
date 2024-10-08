@@ -656,3 +656,8 @@ INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.g
 INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/09/20 00:32:49 logger.go:39: connected to db
 INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/09/20 00:33:04 logger.go:39: shutting down server... Reason: interrupt
 INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/09/20 00:33:04 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/08 16:14:19 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/08 16:14:19 logger.go:39: connected to db
+ERROR: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/handler/middleware.go:15 2024/10/08 16:14:29 logger.go:39: check session in middleware http: named cookie not present
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/08 16:14:59 logger.go:39: shutting down server... Reason: interrupt
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/08 16:14:59 logger.go:39: server gracefully stopped

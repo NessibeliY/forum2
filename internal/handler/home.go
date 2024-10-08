@@ -7,8 +7,7 @@ import (
 	"forum/internal/models"
 )
 
-// home page
-func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		h.logger.Info("Page not found", "home page")
 		h.ErrorHandler(w, http.StatusNotFound, "Whoops...Page not found")
@@ -22,7 +21,6 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := models.Login{IsAuth: false} // default user not auth
-
 	pageStr := r.URL.Query().Get("page")
 	var page int
 	if pageStr == "" {
@@ -37,7 +35,7 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 
 	postsPerPage := 10
 
-	totalPosts, err := h.service.PostService.GetCountPost()
+	totalPosts, err := h.service.PostService.GetPostsCount()
 	if err != nil {
 		h.logger.Info("Error fetching total post count", "home page")
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -48,9 +46,8 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	data.TotalPages = totalPages
 
 	offset := (page - 1) * postsPerPage
-	var posts []models.Post
-	// get all post
-	posts, err = h.service.PostService.GetPostList(postsPerPage*totalPages, offset)
+
+	posts, err := h.service.PostService.GetAllPosts(postsPerPage*totalPages, offset)
 	if err != nil {
 		posts = []models.Post{}
 	}
@@ -60,10 +57,8 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		data.IsAuth = false
 	} else {
-
 		data.IsAuth = true
-		// get user info
-		user, err := h.service.UserService.GetUserUserID(s.UserId)
+		user, err := h.service.UserService.GetUserByUserID(s.UserId)
 		if err != nil {
 			h.logger.Info("Get user by id | Internal server error", "home page")
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -71,11 +66,10 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 		}
 		data.UserName = user.UserName
 		data.Id = s.UserId
-
 	}
 
 	// get tags list
-	categories, err := h.service.PostService.GetCategoryList()
+	categories, err := h.service.PostService.GetAllCategories()
 	if err != nil {
 		h.logger.Info("Get categories/tags", "home page")
 		data.Categories = nil
@@ -90,25 +84,24 @@ func (h *Handler) IndexRouter(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/create-post" {
 		data.ShowCreatePostForm = true
 	}
-	// log.Println("Posts data:", posts)
+
 	h.Render(w, "index.html", data)
 }
 
-// filter user post
-func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		h.logger.Info("Method not allowed", "UserPost handler")
+		h.logger.Info("Method not allowed", "GetUserActivity handler")
 		h.ErrorHandler(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
 
-	data := models.Login{IsAuth: false} // default user not auth
+	data := models.Login{IsAuth: false}
 
 	filter := r.URL.Query().Get("filter")
 	var posts []models.Post
-	posts, err := h.service.PostService.GetPostByTags(filter)
+	posts, err := h.service.PostService.GetPostsByCategory(filter)
 	if err != nil {
-		h.logger.Info("Get post by tags", "UserPost handler")
+		h.logger.Info("Get post by tags", "GetUserActivity handler")
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
@@ -120,35 +113,34 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 	} else {
 		data.IsAuth = true
 
-		user, _ := h.service.UserService.GetUserUserID(s.UserId) // get user info
-		data.UserName = user.UserName                            // set username
-		data.Id = s.UserId                                       // set user id
+		user, _ := h.service.UserService.GetUserByUserID(s.UserId)
+		data.UserName = user.UserName
+		data.Id = s.UserId
 
 		switch filter {
 		case "all":
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		case "my":
-			posts, err = h.service.PostService.GetPostByName(user.UserName)
+			posts, err = h.service.PostService.GetPostsByUsername(user.UserName)
 			data.CurrentPage = "my"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'my'", "UserPost Handler", err)
+				h.logger.Info("Get post by user name - 'my'", "GetUserActivity Handler", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
-				// fmt.Println(err)
 			}
 		case "liked":
-			posts, err = h.service.PostService.GetPostByLiked(user.ID)
+			posts, err = h.service.PostService.GetPostsLikedByUser(user.ID)
 			data.CurrentPage = "liked"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'liked'", "UserPost Handler", err)
+				h.logger.Info("Get post by user name - 'liked'", "GetUserActivity Handler", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
 		case "disliked":
-			posts, err = h.service.PostService.GetPostByDisLike(user.ID)
+			posts, err = h.service.PostService.GetPostsDislikedByUser(user.ID)
 			data.CurrentPage = "disliked"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'disliked'", "UserPost Handler", err)
+				h.logger.Info("Get post by user name - 'disliked'", "GetUserActivity Handler", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
@@ -157,8 +149,8 @@ func (h *Handler) UserPost(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	categories, _ := h.service.PostService.GetCategoryList() // get tags list
-	data.Categories = *categories                            // set tags
+	categories, _ := h.service.PostService.GetAllCategories()
+	data.Categories = *categories
 
 	// get post and comment
 	data.Posts = h.ResponseData(posts, data.UserName, data.Id)

@@ -18,7 +18,7 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 }
 
 // insert new user
-func (u *UserRepo) Insert(user models.User) error {
+func (u *UserRepo) AddUser(user models.User) error {
 	stmt := `INSERT INTO users(id,created_at,username,email,password)VALUES(?,datetime('now','localtime'),?,?,?)`
 	if _, err := u.db.Exec(stmt, user.ID, user.UserName, user.Email, user.Password); err != nil {
 		return fmt.Errorf("INSERT INTO DB: %v", err)
@@ -42,7 +42,7 @@ func (u *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func (u *UserRepo) GetUserUserID(id string) (*models.User, error) {
+func (u *UserRepo) GetUserByUserID(id string) (*models.User, error) {
 	var user models.User
 	stmt := "SELECT * FROM users WHERE ID = ?"
 	row := u.db.QueryRow(stmt, id)

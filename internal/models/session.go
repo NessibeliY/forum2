@@ -10,16 +10,14 @@ type Session struct {
 }
 
 type SessionRepository interface {
-	Insert(sessiong Session) error
-	DeleteSessionByUser(user_id string) error
+	AddSession(session Session) error
+	DeleteSessionByUserID(user_id string) error
 	GetSessionById(user_id string) (*Session, error)
 	GetSessionByToken(token string) (*Session, error)
 }
 
 type SessionService interface {
-	CreateSession(userID, email string) (*Session, error)
+	SetSession(userID string) (*Session, error)
 	GetSessionByToken(token string) (*Session, error)
-	IsSession(userID string) bool
 	GetSessionByUserId(user_id string) (*Session, error)
-	DeleteSessionByUser(user_id string) error
 }

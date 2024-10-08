@@ -5,10 +5,10 @@ type Login struct {
 	IsAuth             bool
 	UserName           string
 	Categories         []Categories
-	Posts              []ResPostModel
+	Posts              []UserPostsResponse
 	CurrentPage        string
 	CommentError       ErrorComment
-	Error              ErrorMessage
+	ErrorMessages      ErrorMessage
 	ShowCreatePostForm bool
 	Post               Post
 	Comment            []Comment

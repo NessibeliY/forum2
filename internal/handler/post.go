@@ -10,25 +10,22 @@ import (
 	"forum/internal/validator"
 )
 
-// create post
 func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	session, ok := r.Context().Value(models.SessionKey).(models.Session)
 	if !ok {
 		h.ErrorHandler(w, http.StatusUnauthorized, "Unauthorized\nPlease sign in or sign up")
 		return
 	}
-	// get info about user
-	user, err := h.service.UserService.GetUserUserID(session.UserId)
+
+	user, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		h.ErrorHandler(w, http.StatusUnauthorized, "Unauthorized\nPlease sign in or sign up")
 		return
 	}
 
-	// default user not auth
 	data := models.Login{IsAuth: true}
 
-	// categories/tags for post
-	categories, err := h.service.PostService.GetCategoryList()
+	categories, err := h.service.PostService.GetAllCategories()
 	if err != nil {
 		data.Categories = nil
 	}
@@ -40,12 +37,12 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		title := r.Form.Get("title")             // title
-		description := r.Form.Get("description") // description
-		tags := r.Form["tags"]                   // tags
+		title := r.Form.Get("title")
+		description := r.Form.Get("description")
+		tags := r.Form["tags"]
 
-		v := validator.NewValidator() // validator
-		post := &models.Post{
+		v := validator.NewValidator()
+		createPostRequest := &models.CreatePostRequest{
 			UserID:      user.ID,
 			Author:      user.UserName,
 			Title:       title,
@@ -53,27 +50,26 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 			Tags:        tags,
 		}
 
-		// validate post input
-		if models.ValidatePost(v, post); !v.Valid() {
-			if v.Errors["title"] != "" {
-				data.Error.Title = v.Errors["title"]
+		if models.ValidateCreatePostRequest(v, createPostRequest); !v.Valid() {
+			if v.ErrorsMap["title"] != "" {
+				data.ErrorMessages.Title = v.ErrorsMap["title"]
 			}
 
-			if v.Errors["description"] != "" {
-				data.Error.Description = v.Errors["description"]
+			if v.ErrorsMap["description"] != "" {
+				data.ErrorMessages.Description = v.ErrorsMap["description"]
 			}
 
-			if v.Errors["tags"] != "" {
-				data.Error.Tags = v.Errors["tags"]
+			if v.ErrorsMap["tags"] != "" {
+				data.ErrorMessages.Tags = v.ErrorsMap["tags"]
 			}
 		}
 
-		data.Post.Title = title             // title
-		data.Post.Description = description // description
-		data.Post.Tags = tags               // tags
+		data.Post.Title = title
+		data.Post.Description = description
+		data.Post.Tags = tags
 
-		if data.Error.Title == "" && data.Error.Tags == "" && data.Error.Description == "" {
-			err := h.service.PostService.CreatePost(post) // create post
+		if data.ErrorMessages.Title == "" && data.ErrorMessages.Tags == "" && data.ErrorMessages.Description == "" {
+			err := h.service.PostService.CreatePost(createPostRequest)
 			if err != nil {
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 				return
@@ -82,32 +78,13 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	data.UserName = user.UserName // set username
-	data.Categories = *categories // set categories
+	data.UserName = user.UserName
+	data.Categories = *categories
 
-	// http.Redirect(w, r, "/", http.StatusSeeOther)
 	h.Render(w, "create_post.html", data)
 }
 
-// get all post
-func (h *Handler) GetAllPosts(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.ErrorHandler(w, http.StatusMethodNotAllowed, "Methot not allowed")
-		return
-	}
-	// get all post list
-	// data, err := h.service.Post.GetCategoryList()
-	// if err != nil {
-	// 	http.Error(w, "Internal server error", http.StatusInternalServerError)
-	// 	return
-	// }
-
-	h.Render(w, "index.html", nil)
-}
-
-// like post
 func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
-	// CHECK METHOD
 	if r.Method != http.MethodPost {
 		h.ErrorHandler(w, http.StatusMethodNotAllowed, "Method not allowd")
 		return
@@ -119,16 +96,14 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.UserService.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	// post_id
 	postID := r.FormValue("postId")
 
-	// new like model
 	newLike := models.Like{
 		PostId: postID,
 		UserId: user.ID,
@@ -143,7 +118,7 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = h.service.PostService.IncrementLike(postID)
+		err = h.service.PostService.IncrementLikeCount(postID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
@@ -159,9 +134,7 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-// dislike post
 func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
-	// CHECK METHOD
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -173,16 +146,14 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.UserService.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	// post_id
 	postID := r.FormValue("postId")
 
-	// new dislike
 	dislike := &models.Dislike{
 		PostId: postID,
 		UserId: user.ID,
@@ -195,7 +166,7 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = h.service.PostService.IncrementDisLike(postID)
+		err = h.service.PostService.IncrementDislikeCount(postID)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
@@ -228,8 +199,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 			data.IsAuth = false
 		} else {
 			data.IsAuth = true
-			// get user info
-			user, err := h.service.UserService.GetUserUserID(session.UserId)
+			user, err := h.service.UserService.GetUserByUserID(session.UserId)
 			if err != nil {
 				h.logger.Info("Get user by id | Internal server error", "home page")
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -240,7 +210,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		categories, err := h.service.PostService.GetCategoryList()
+		categories, err := h.service.PostService.GetAllCategories()
 		if err != nil {
 			h.logger.Info("Get categories/tags", "home page")
 			data.Categories = nil
@@ -250,7 +220,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 		comments := h.GetComment(post_id, data.UserName, data.Id)
 		data.Comment = comments
 
-		post, err := h.service.PostService.GetPostByID(post_id)
+		post, err := h.service.PostService.GetPostByPostID(post_id)
 		if err != nil {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 			return
@@ -258,20 +228,19 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 
 		data.Post = *post
 
-		// defalut value current page
+		// default value current page
 		data.CurrentPage = "all"
 
 		h.Render(w, "post.html", data)
 	}
 }
 
-// add new comment
 func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 	session, ok := r.Context().Value(models.SessionKey).(models.Session)
 
 	if r.Method == http.MethodPost {
 		if ok {
-			user, err := h.service.UserService.GetUserUserID(session.UserId)
+			user, err := h.service.UserService.GetUserByUserID(session.UserId)
 			if err != nil {
 				h.ErrorHandler(w, http.StatusUnauthorized, "Unauthorized")
 				return
@@ -299,7 +268,7 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			err = h.service.PostService.IncrementComment(postID)
+			err = h.service.PostService.IncrementCommentCount(postID)
 			if err != nil {
 				h.logger.Error("Increment Comment In Post", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
@@ -313,7 +282,6 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// like for comment
 func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -326,7 +294,7 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.UserService.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -364,7 +332,6 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/post/?post-id=%s", postID), http.StatusSeeOther)
 }
 
-// dislike for comment
 func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -377,7 +344,7 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.UserService.GetUserUserID(session.UserId)
+	user, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -416,7 +383,6 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/post/?post-id=%s", postID), http.StatusSeeOther)
 }
 
-// delete post
 func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -429,7 +395,7 @@ func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.service.UserService.GetUserUserID(session.UserId)
+	_, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -437,7 +403,7 @@ func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	postId := r.FormValue("postId")
 
-	err = h.service.PostService.Delete(postId)
+	err = h.service.PostService.DeletePostByPostID(postId)
 	if err != nil {
 		fmt.Println("error", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Sever error")
@@ -466,7 +432,7 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.service.UserService.GetUserUserID(session.UserId)
+	_, err := h.service.UserService.GetUserByUserID(session.UserId)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -482,7 +448,7 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.PostService.DecrementComment(postID)
+	err = h.service.PostService.DecrementCommentCount(postID)
 	if err != nil {
 		fmt.Println("error:", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")

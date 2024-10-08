@@ -9,24 +9,23 @@ import (
 var EmailRX = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 type Validator struct {
-	Errors map[string]string
+	ErrorsMap map[string]string
 }
 
 func NewValidator() *Validator {
 	return &Validator{
-		Errors: make(map[string]string),
+		ErrorsMap: make(map[string]string),
 	}
 }
 
-// Valid returns true if the errors map doesn't contain any entries.
 func (v *Validator) Valid() bool {
-	return len(v.Errors) == 0
+	return len(v.ErrorsMap) == 0
 }
 
-// AddError adds an error message to the map (so long as no entry already exists for the given key).
+// AddError adds an error message to the map (as long as no entry already exists for the given key).
 func (v *Validator) AddErrors(key, message string) {
-	if _, exist := v.Errors[key]; !exist {
-		v.Errors[key] = message
+	if _, exist := v.ErrorsMap[key]; !exist {
+		v.ErrorsMap[key] = message
 	}
 }
 

@@ -20,13 +20,13 @@ func (h *Handler) Render(w http.ResponseWriter, page string, data interface{}) {
 	}
 }
 
-func (h *Handler) ResponseData(posts []models.Post, user_name, user_id string) []models.ResPostModel {
-	var res []models.ResPostModel
+func (h *Handler) ResponseData(posts []models.Post, username, userID string) []models.UserPostsResponse {
+	var res []models.UserPostsResponse
 	for _, post := range posts {
 		// check exist like in post from current user
-		existLike := h.service.ReactionService.LikeExistInPost(post.PostID, user_id)
+		existLike := h.service.ReactionService.LikeExistInPost(post.PostID, userID)
 		// check exist dislike in post from current user
-		existDisLike := h.service.ReactionService.DisLikeExistInPost(post.PostID, user_id)
+		existDisLike := h.service.ReactionService.DisLikeExistInPost(post.PostID, userID)
 
 		post.IsLike = existLike
 		post.IsDisLike = existDisLike
@@ -35,10 +35,10 @@ func (h *Handler) ResponseData(posts []models.Post, user_name, user_id string) [
 		comments, _ := h.service.ReactionService.GetCommentsByID(post.PostID)
 
 		for el := range comments {
-			comments[el].OwnerId = user_name
+			comments[el].OwnerId = username
 			// check if comment is liked
-			like := h.service.ReactionService.ExistLikeInComment(user_id, comments[el].CommentId)
-			dislike := h.service.ReactionService.ExistDisLikeInComment(user_id, comments[el].CommentId)
+			like := h.service.ReactionService.ExistLikeInComment(userID, comments[el].CommentId)
+			dislike := h.service.ReactionService.ExistDisLikeInComment(userID, comments[el].CommentId)
 
 			comments[el].IsLiked = like
 			comments[el].DisLiked = dislike
@@ -46,10 +46,10 @@ func (h *Handler) ResponseData(posts []models.Post, user_name, user_id string) [
 		}
 
 		// response/result data
-		posts := models.ResPostModel{
+		posts := models.UserPostsResponse{
 			Posts:    post,
 			Comments: comments,
-			OwnerId:  user_id,
+			OwnerId:  userID,
 		}
 		res = append(res, posts)
 	}

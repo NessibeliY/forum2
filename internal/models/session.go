@@ -4,7 +4,7 @@ import "time"
 
 type Session struct {
 	SessionId  string
-	UserId     string
+	UserID     string
 	Token      string
 	ExpireTime time.Time
 }
@@ -17,7 +17,7 @@ type SessionRepository interface {
 }
 
 type SessionService interface {
-	SetSession(userID string) (*Session, error)
+	SetSession(UserID string) (*Session, error)
 	GetSessionByToken(token string) (*Session, error)
 	GetSessionByUserId(user_id string) (*Session, error)
 }

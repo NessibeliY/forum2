@@ -58,14 +58,14 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		data.IsAuth = false
 	} else {
 		data.IsAuth = true
-		user, err := h.service.UserService.GetUserByUserID(s.UserId)
+		user, err := h.service.UserService.GetUserByUserID(s.UserID)
 		if err != nil {
 			h.logger.Info("Get user by id | Internal server error", "home page")
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
 		data.UserName = user.UserName
-		data.Id = s.UserId
+		data.Id = s.UserID
 	}
 
 	// get tags list
@@ -113,9 +113,9 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	} else {
 		data.IsAuth = true
 
-		user, _ := h.service.UserService.GetUserByUserID(s.UserId)
+		user, _ := h.service.UserService.GetUserByUserID(s.UserID)
 		data.UserName = user.UserName
-		data.Id = s.UserId
+		data.Id = s.UserID
 
 		switch filter {
 		case "all":

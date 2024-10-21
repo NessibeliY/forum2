@@ -19,10 +19,14 @@ func NewPostRepo(db *sql.DB) *PostRepo {
 }
 
 func (p *PostRepo) GetAllPosts(postPerPage, offset int) ([]models.Post, error) {
-	stmt := `SELECT * FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?`
-	rows, err := p.db.Query(stmt, postPerPage, offset)
+	query := `SELECT * FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?`
+	return p.fetchAndReturn(query, postPerPage, offset)
+}
+
+func (p *PostRepo) fetchAndReturn(query string, params ...interface{}) ([]models.Post, error) {
+	rows, err := p.db.Query(query, params...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("query data: %w", err)
 	}
 	defer rows.Close()
 
@@ -30,19 +34,36 @@ func (p *PostRepo) GetAllPosts(postPerPage, offset int) ([]models.Post, error) {
 	for rows.Next() {
 		var post models.Post
 		var tagsStr string
-		if err := rows.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.Likes, &post.Dislikes, &post.Comments, &tagsStr); err != nil {
-			return nil, err
+		err = rows.Scan(
+			&post.PostID,
+			&post.UserID,
+			&post.Author,
+			&post.Title,
+			&post.Description,
+			&post.CreatedAt,
+			&post.UpdatedAt,
+			&post.LikeCount,
+			&post.DislikeCount,
+			&post.Comments,
+			&tagsStr,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("scan data: %w", err)
 		}
 		post.Tags = strings.Split(tagsStr, ",")
 		posts = append(posts, post)
 	}
 
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows: %w", err)
+	}
+
 	return posts, nil
 }
 
-func (p *PostRepo) DeletePostByPostID(post_id string) error {
+func (p *PostRepo) DeletePostByPostID(PostID string) error {
 	stmt := `DELETE FROM posts WHERE post_id = ?`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		fmt.Println("repo: ", err)
 		return models.ErrDeletePost
 	}
@@ -74,7 +95,7 @@ func (p *PostRepo) AddPost(post models.Post) error {
 	stmt := `INSERT INTO posts(post_id,user_id,author,title,description,created_at,updated_at,likes,dislikes,comments,tags)
 	VALUES(?,?,?,?,?,datetime('now','localtime'),datetime('now','localtime'),?,?,?,?)`
 	tagStr := strings.Join(post.Tags, ",")
-	if _, err := p.db.Exec(stmt, post.PostID, post.UserID, post.Author, post.Title, post.Description, post.Likes, post.Dislikes, post.Comments, tagStr); err != nil {
+	if _, err := p.db.Exec(stmt, post.PostID, post.UserID, post.Author, post.Title, post.Description, post.LikeCount, post.DislikeCount, post.Comments, tagStr); err != nil {
 		fmt.Println("ERR", err)
 		return models.ErrPostNotCreated
 	}
@@ -82,49 +103,49 @@ func (p *PostRepo) AddPost(post models.Post) error {
 	return nil
 }
 
-func (p *PostRepo) IncrementLikeCount(post_id string) error {
+func (p *PostRepo) IncrementLikeCount(PostID string) error {
 	stmt := `UPDATE posts SET likes = likes + 1 WHERE post_id = ?`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrIncrementLikeInPost
 	}
 	return nil
 }
 
-func (p *PostRepo) DecrementLikeCount(post_id string) error {
+func (p *PostRepo) DecrementLikeCount(PostID string) error {
 	stmt := `UPDATE posts SET likes = likes - 1 WHERE post_id = ? AND likes > 0`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrDecrementLikeInPost
 	}
 	return nil
 }
 
-func (p *PostRepo) IncrementDislikeCount(post_id string) error {
+func (p *PostRepo) IncrementDislikeCount(PostID string) error {
 	stmt := `UPDATE posts SET dislikes = dislikes + 1 WHERE post_id = ?`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrIncrementLikeInPost
 	}
 	return nil
 }
 
-func (p *PostRepo) DecrementDislikeCount(post_id string) error {
+func (p *PostRepo) DecrementDislikeCount(PostID string) error {
 	stmt := `UPDATE posts SET dislikes = dislikes - 1 WHERE post_id = ? AND dislikes > 0`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrDecrementDisLikeInPost
 	}
 	return nil
 }
 
-func (p *PostRepo) IncrementCommentCount(post_id string) error {
+func (p *PostRepo) IncrementCommentCount(PostID string) error {
 	stmt := `UPDATE posts SET comments = comments + 1 WHERE post_id = ?`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrIncrementCommentInPost
 	}
 	return nil
 }
 
-func (p *PostRepo) DecrementCommentCount(post_id string) error {
+func (p *PostRepo) DecrementCommentCount(PostID string) error {
 	stmt := `UPDATE posts SET comments = comments - 1 WHERE post_id = ? AND comments > 0`
-	if _, err := p.db.Exec(stmt, post_id); err != nil {
+	if _, err := p.db.Exec(stmt, PostID); err != nil {
 		return models.ErrDecrementCommentInpost
 	}
 
@@ -142,7 +163,7 @@ func (p *PostRepo) GetPostsByUsername(username string) ([]models.Post, error) {
 	for rows.Next() {
 		var post models.Post
 		var tagsStr string
-		if err := rows.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.Likes, &post.Dislikes, &post.Comments, &tagsStr); err != nil {
+		if err := rows.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.LikeCount, &post.DislikeCount, &post.Comments, &tagsStr); err != nil {
 			return nil, models.ErrNotFound
 		}
 		post.Tags = strings.Split(tagsStr, ",")
@@ -151,72 +172,24 @@ func (p *PostRepo) GetPostsByUsername(username string) ([]models.Post, error) {
 	return posts, nil
 }
 
-func (p *PostRepo) GetPostsLikedByUser(user_id string) ([]models.Post, error) {
-	stmt := `SELECT p.post_id, p.user_id, p.author, p.title, p.description, p.created_at, p.updated_at, p.likes, p.dislikes, p.comments, p.tags
+func (p *PostRepo) GetPostsLikedByUser(UserID string) ([]models.Post, error) {
+	query := `SELECT p.post_id, p.user_id, p.author, p.title, p.description, p.created_at, p.updated_at, p.likes, p.dislikes, p.comments, p.tags
 			FROM posts AS p
 			JOIN likes AS l ON p.post_id = l.post_id
 			WHERE l.user_id = ?
 			ORDER BY p.created_at DESC`
 
-	rows, err := p.db.Query(stmt, user_id)
-	if err != nil {
-		return nil, err
-	}
-
-	defer rows.Close()
-
-	var posts []models.Post
-
-	for rows.Next() {
-		var post models.Post
-
-		var tagsStr string
-		if err := rows.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.Likes, &post.Dislikes, &post.Comments, &tagsStr); err != nil {
-			return nil, err
-		}
-		post.Tags = strings.Split(tagsStr, ",")
-		posts = append(posts, post)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return posts, nil
+	return p.fetchAndReturn(query, UserID)
 }
 
-func (p *PostRepo) GetPostsDislikedByUser(user_id string) ([]models.Post, error) {
-	stmt := `SELECT p.post_id, p.user_id, p.author, p.title, p.description, p.created_at, p.updated_at, p.likes, p.dislikes, p.comments, p.tags
+func (p *PostRepo) GetPostsDislikedByUser(UserID string) ([]models.Post, error) {
+	query := `SELECT p.post_id, p.user_id, p.author, p.title, p.description, p.created_at, p.updated_at, p.likes, p.dislikes, p.comments, p.tags
 			FROM posts AS p
 			JOIN dislikes AS l ON p.post_id = l.post_id
 			WHERE l.user_id = ?
 			ORDER BY p.created_at DESC`
 
-	rows, err := p.db.Query(stmt, user_id)
-	if err != nil {
-		return nil, err
-	}
-
-	defer rows.Close()
-
-	var posts []models.Post
-
-	for rows.Next() {
-		var post models.Post
-
-		var tagsStr string
-		if err := rows.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.Likes, &post.Dislikes, &post.Comments, &tagsStr); err != nil {
-			return nil, err
-		}
-		post.Tags = strings.Split(tagsStr, ",")
-		posts = append(posts, post)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return posts, nil
+	return p.fetchAndReturn(query, UserID)
 }
 
 func (p *PostRepo) GetPostsByCategory(tag string) ([]models.Post, error) {
@@ -243,8 +216,8 @@ func (p *PostRepo) GetPostsByCategory(tag string) ([]models.Post, error) {
 			&post.Description,
 			&post.CreatedAt,
 			&post.UpdatedAt,
-			&post.Likes,
-			&post.Dislikes,
+			&post.LikeCount,
+			&post.DislikeCount,
 			&post.Comments,
 			&tagsStr,
 		); err != nil {
@@ -260,12 +233,12 @@ func (p *PostRepo) GetPostsByCategory(tag string) ([]models.Post, error) {
 	return posts, nil
 }
 
-func (p *PostRepo) GetPostByPostID(post_id string) (*models.Post, error) {
+func (p *PostRepo) GetPostByPostID(PostID string) (*models.Post, error) {
 	var post models.Post
 	stmt := `SELECT * FROM posts WHERE post_id = ?`
-	row := p.db.QueryRow(stmt, post_id)
+	row := p.db.QueryRow(stmt, PostID)
 	var tags string
-	err := row.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.Likes, &post.Dislikes, &post.Comments, &tags)
+	err := row.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.LikeCount, &post.DislikeCount, &post.Comments, &tags)
 	if err == sql.ErrNoRows {
 		return nil, err
 	} else if err != nil {

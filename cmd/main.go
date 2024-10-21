@@ -61,8 +61,8 @@ func gracefulShutdown(l *logger.Logger, srv *server.Server, serverErrors <-chan 
 	select {
 	case err := <-serverErrors:
 		l.Error("server error: ", err)
-	case sig := <-quit:
-		l.Info("shutting down server... Reason:", sig)
+	case <-quit:
+		l.Info("shutting down server...")
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 		defer cancel()

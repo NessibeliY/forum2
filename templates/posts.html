@@ -33,7 +33,7 @@
                                 <span class="close" data-close="delete_modal_{{.Posts.PostID}}">&times;</span>
                             </div>
                             <form action="/user/post/delete" method="POST" class="flex flex-col items-center justify-center w-full mt-3">
-                                <input type="hidden" name="postId" value="{{.Posts.PostID}}">
+                                <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                                 <p class="text-xl">Are you sure??</p>
                                 <div class="flex items-center justify-center mt-2">
                                     <button class="bg-red-600 py-2 px-2 mx-1 rounded-lg text-white hover:bg-red-700 transition duration-300" type="submit">yes</button>
@@ -60,26 +60,26 @@
             <div class="header_wrapper">
                 <div class="flex">
                 <form action="/like" method="POST">
-                    <input type="hidden" name="postId" value="{{.Posts.PostID}}">
+                    <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                     {{if .Posts.IsLike}}
                     <button class="btn_like btn_like_active" type="submit">
-                        <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Posts.Likes }})
+                        <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Posts.LikeCount }})
                     </button>
                     {{else}}
                     <button class="btn_like " type="submit">
-                        <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Posts.Likes }})
+                        <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Posts.LikeCount }})
                     </button>
                     {{end}}
                 </form>
                 <form action="/dislike"  method="POST">
-                    <input type="hidden" name="postId" value="{{.Posts.PostID}}">
+                    <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                     {{if .Posts.IsDisLike}}
                     <button class="btn_like btn_like_active" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.Dislikes}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikeCount}})
                     </button>
                     {{else}}
                     <button class="btn_like" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.Dislikes}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikeCount}})
                     </button>
                     {{end}}
                 </form>

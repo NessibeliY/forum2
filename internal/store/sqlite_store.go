@@ -7,7 +7,7 @@ import (
 
 	"forum/pkg/logger"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/mattn/go-sqlite3" //nolint:revive
 )
 
 func InitDB(l *logger.Logger, dbDriver, dbPath, migrationPath string) (*sql.DB, error) {

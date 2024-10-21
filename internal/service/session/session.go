@@ -18,13 +18,13 @@ func NewSessionService(sessionRepo models.SessionRepository) *SessionService {
 	}
 }
 
-func (s *SessionService) SetSession(userID string) (*models.Session, error) {
-	err := s.SessionRepo.DeleteSessionByUserID(userID)
+func (s *SessionService) SetSession(UserID string) (*models.Session, error) {
+	err := s.SessionRepo.DeleteSessionByUserID(UserID)
 	if err != nil {
 		return nil, err
 	}
 
-	session, err := s.createSession(userID)
+	session, err := s.createSession(UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (s *SessionService) SetSession(userID string) (*models.Session, error) {
 	return session, nil
 }
 
-func (s *SessionService) createSession(userID string) (*models.Session, error) {
+func (s *SessionService) createSession(UserID string) (*models.Session, error) {
 	id, err := uuid.NewV4()
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (s *SessionService) createSession(userID string) (*models.Session, error) {
 	expire_time := time.Now().Add(time.Hour * 2)
 	session := models.Session{
 		SessionId:  id.String(),
-		UserId:     userID,
+		UserID:     UserID,
 		Token:      token.String(),
 		ExpireTime: expire_time,
 	}

@@ -39,27 +39,27 @@
 
                 <div class="flex w-full items-center">
                     <form action="/like" method="POST" class="flex my-2 mb-2">   
-                        <input type="hidden" name="postId" value="{{.Post.PostID}}"> 
+                        <input type="hidden" name="PostID" value="{{.Post.PostID}}">
                         {{if .Post.IsLike}}
                         <button class="btn_like btn_like_active text-2xl" type="submit">
-                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Post.Likes }})
+                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Post.LikeCount }})
                         </button>
                         {{else}}
                         <button class="btn_like text-white text-2xl" type="submit">
-                            <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Post.Likes }})
+                            <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Post.LikeCount }})
                         </button>
                         {{end}}
                     </form>
     
                     <form action="/dislike"  method="POST">
-                        <input type="hidden" name="postId" value="{{.Post.PostID}}">
+                        <input type="hidden" name="PostID" value="{{.Post.PostID}}">
                         {{if .Post.IsDisLike}}
                         <button class="btn_like btn_like_active text-2x" type="submit">
-                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.Dislikes}})
+                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.DislikeCount}})
                         </button>
                         {{else}}
                         <button class="btn_like text-white text-2xl" type="submit">
-                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.Dislikes}})
+                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.DislikeCount}})
                         </button>
                         {{end}}
                     </form>
@@ -69,7 +69,7 @@
                 <div class="flex flex-col mb-4">
                     {{if .IsAuth}}
                     <form class="flex_full_col" style="align-items: center;" action="/add-comment/" method="POST">
-                        <input type="hidden" name="post-id" id="postId"> 
+                        <input type="hidden" name="post-id" id="PostID">
                         <div class="flex_full_col ">
                             <textarea
                             name="comment_text"
@@ -103,28 +103,28 @@
                                     <!-- Check if the comment's ownerId matches the current user -->
                                     {{if eq .OwnerId .Author}} 
                                         <div class="text-xl dropdown">
-                                            <i class="fa-solid fa-bars" data-target="dropdown-{{.CommentId}}"></i>
-                                            <div class="select_menu" id="dropdown-{{.CommentId}}">
+                                            <i class="fa-solid fa-bars" data-target="dropdown-{{.CommentID}}"></i>
+                                            <div class="select_menu" id="dropdown-{{.CommentID}}">
                                                 <ul class="options card">
-                                                    <li class="option del_btn_modal" data-modal="delete_comm_{{.CommentId}}">
+                                                    <li class="option del_btn_modal" data-modal="delete_comm_{{.CommentID}}">
                                                         Delete                                         
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="modal" id="delete_comm_{{.CommentId}}">
+                                        <div class="modal" id="delete_comm_{{.CommentID}}">
                                             <div class="modal-content delete_form_modal">
                                                 <div class="flex items-center justify-between w-full">
                                                     <span class="text-bold text-2xl">DELETE COMMENT</span>
-                                                    <span class="close" data-close="delete_comm_{{.CommentId}}">&times;</span>
+                                                    <span class="close" data-close="delete_comm_{{.CommentID}}">&times;</span>
                                                 </div>
                                                 <form action="/user/comment/delete" method="POST" class="flex flex-col items-center justify-center w-full mt-3">
-                                                    <input type="hidden" name="commentId" value="{{.CommentId}}">
-                                                    <input type="hidden" name="PostId" id="post-id-like" value="{{$.Post.PostID}}">
+                                                    <input type="hidden" name="CommentID" value="{{.CommentID}}">
+                                                    <input type="hidden" name="PostID" id="post-id-like" value="{{$.Post.PostID}}">
                                                     <p class="text-xl">Are you sure??</p>
                                                     <div class="flex items-center justify-center mt-2">
                                                         <button class="bg-red-600 py-2 px-2 mx-1 rounded-lg text-white hover:bg-red-700 transition duration-300" type="submit">yes</button>
-                                                        <div class="bg-green-600 py-2 px-2 mx-1 rounded-lg text-white hover:bg-green-700 transition duration-300 cursor-pointer" data-close="delete_comm_{{.CommentId}}">no</div>
+                                                        <div class="bg-green-600 py-2 px-2 mx-1 rounded-lg text-white hover:bg-green-700 transition duration-300 cursor-pointer" data-close="delete_comm_{{.CommentID}}">no</div>
                                                     </div>
                                                 </form>
                                             </div>
@@ -136,8 +136,8 @@
                             <div class="flex py-2 justify-between">
                                 <div class="flex items-start w-full">
                                     <form class="flex" action="/comment/like" method="POST">
-                                        <input type="hidden" name="commentId" value="{{ .CommentId}}">
-                                        <input type="hidden" name="PostId" id="post-id-like" value="{{$.Post.PostID}}">
+                                        <input type="hidden" name="CommentID" value="{{ .CommentID}}">
+                                        <input type="hidden" name="PostID" id="post-id-like" value="{{$.Post.PostID}}">
                                         {{if .IsLiked}}
                                         <button class="btn_like_com btn_like_active">
                                             <i class="fa-regular fa-thumbs-up mx-1"></i> Liked ({{ .Likes }})                            
@@ -149,8 +149,8 @@
                                         {{ end }}
                                     </form>
                                     <form action="/comment/dislike" method="POST">
-                                        <input type="hidden" name="commentId" value="{{ .CommentId}}">
-                                        <input type="hidden" name="PostId" id="post-id-like" value="{{$.Post.PostID}}">
+                                        <input type="hidden" name="CommentID" value="{{ .CommentID}}">
+                                        <input type="hidden" name="PostID" id="post-id-like" value="{{$.Post.PostID}}">
                                         {{if .DisLiked}}
                                         <button class="btn_like_com btn_like_active">
                                             <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked ({{.DisLikes}})
@@ -198,11 +198,11 @@
     }
 
     // Получаем post-id из URL
-    let postId = getQueryParam('post-id');
-    if (postId) {
-        document.getElementById('postId').value = postId;
-        document.getElementById('post-id-like').value = postId
-        document.getElementById('post-id-dislike').value = postId
+    let PostID = getQueryParam('post-id');
+    if (PostID) {
+        document.getElementById('PostID').value = PostID;
+        document.getElementById('post-id-like').value = PostID
+        document.getElementById('post-id-dislike').value = PostID
     }
 
 

@@ -28,21 +28,21 @@ func (p *PostService) GetPostsByCategory(tag string) ([]models.Post, error) {
 }
 
 func (p *PostService) CreatePost(createPostRequest *models.CreatePostRequest) error {
-	postID, err := uuid.NewV4()
+	PostID, err := uuid.NewV4()
 	if err != nil {
 		return models.ErrUUIDCreate
 	}
 
 	newPost := &models.Post{
-		PostID:      postID.String(),
-		UserID:      createPostRequest.UserID,
-		Author:      createPostRequest.Author,
-		Title:       createPostRequest.Title,
-		Description: createPostRequest.Description,
-		Likes:       0,
-		Dislikes:    0,
-		Comments:    0,
-		Tags:        createPostRequest.Tags,
+		PostID:       PostID.String(),
+		UserID:       createPostRequest.UserID,
+		Author:       createPostRequest.Author,
+		Title:        createPostRequest.Title,
+		Description:  createPostRequest.Description,
+		LikeCount:    0,
+		DislikeCount: 0,
+		Comments:     0,
+		Tags:         createPostRequest.Tags,
 	}
 
 	err = p.PostRepo.AddPost(*newPost)

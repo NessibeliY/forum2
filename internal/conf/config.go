@@ -17,14 +17,14 @@ type Config struct {
 
 func Load() (*Config, error) {
 	conf := &Config{}
-	confJson, err := os.ReadFile("config.json")
+	confJSON, err := os.ReadFile("config.json")
 	if err != nil {
-		return nil, fmt.Errorf("read config - %v", err)
+		return nil, fmt.Errorf("read config: %w", err)
 	}
 
-	err = json.Unmarshal(confJson, conf)
+	err = json.Unmarshal(confJSON, conf)
 	if err != nil {
-		return nil, fmt.Errorf("unmarshal config - %v", err)
+		return nil, fmt.Errorf("unmarshal config: %w", err)
 	}
 
 	return conf, nil

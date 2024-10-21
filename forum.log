@@ -1335,3 +1335,15 @@ INFO: /home/student/1/forum/internal/handler/middleware.go:15 2024/10/21 14:39:2
 INFO: /home/student/1/forum/internal/handler/middleware.go:15 2024/10/21 14:39:29 logger.go:39: check session in middleware http: named cookie not present
 INFO: /home/student/1/forum/internal/handler/middleware.go:15 2024/10/21 14:39:31 logger.go:39: check session in middleware http: named cookie not present
 INFO: /home/student/1/forum/internal/handler/home.go:12 2024/10/21 14:40:17 logger.go:39: Page not found home page
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/21 18:17:16 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/21 18:17:16 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/21 18:17:16 logger.go:39: starting server at http://localhost%s
+ :8080
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/21 18:27:50 logger.go:39: shutting down server... Reason: interrupt
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/21 18:27:50 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/21 18:28:56 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/21 18:28:56 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/21 18:28:56 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/21 18:29:44 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/21 18:29:44 logger.go:39: server gracefully stopped

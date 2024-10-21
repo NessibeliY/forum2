@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserService struct {
+type UserService struct { //nolint:revive
 	UserRepo models.UserRepository
 }
 

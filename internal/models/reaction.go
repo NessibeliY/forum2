@@ -3,44 +3,44 @@ package models
 import "time"
 
 type Like struct {
-	LikeId    string
-	PostId    string
-	UserId    string
+	LikeID    string
+	PostID    string
+	UserID    string
 	CreatedAt string
 }
 
 type Dislike struct {
-	DisLikeId string
-	PostId    string
-	UserId    string
+	DislikeID string
+	PostID    string
+	UserID    string
 	CreatedAt string
 }
 
 type Comment struct {
-	CommentId   string
-	PostId      string
-	Author      string
-	CommentText string
-	Likes       int
-	DisLikes    int
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	IsLiked     bool
-	DisLiked    bool
-	OwnerId     string
+	CommentID    string
+	PostID       string
+	Author       string
+	CommentText  string
+	LikeCount    int
+	DislikeCount int
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	IsLiked      bool
+	DisLiked     bool
+	OwnerId      string
 }
 
 type CommentLike struct {
-	LikeId    string
-	CommentId string
-	UserId    string
+	LikeID    string
+	CommentID string
+	UserID    string
 	CreatedAt string
 }
 
 type CommentDislike struct {
-	DisLikeId string
-	CommentId string
-	UserId    string
+	DislikeID string
+	CommentID string
+	UserID    string
 	CreatedAt string
 }
 

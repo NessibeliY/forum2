@@ -47,23 +47,22 @@ func (v *Validator) MinChars(value string, n int) bool {
 }
 
 func (v *Validator) ValidPassword(password string) bool {
-	hasDigit := false
-	hasUpper := false
-	hasLower := false
+	hasDigit, hasUpper, hasLower := false, false, false
 
 	for _, ch := range password {
-		if unicode.IsDigit(ch) {
+		switch {
+		case unicode.IsDigit(ch):
 			hasDigit = true
-		} else if unicode.IsUpper(ch) {
+		case unicode.IsUpper(ch):
 			hasUpper = true
-		} else if unicode.IsLower(ch) {
+		case unicode.IsLower(ch):
 			hasLower = true
+		}
+
+		if hasDigit && hasUpper && hasLower {
+			return true
 		}
 	}
 
-	if !hasDigit || !hasUpper || !hasLower {
-		return false
-	}
-
-	return true
+	return hasDigit && hasUpper && hasLower
 }

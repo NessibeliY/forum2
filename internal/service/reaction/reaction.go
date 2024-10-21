@@ -55,9 +55,9 @@ func (r *ReactionService) CreateLikeInPost(like *models.Like) error {
 	}
 	// new like
 	newReaction := &models.Like{
-		LikeId: id.String(),
-		PostId: like.PostId,
-		UserId: like.UserId,
+		LikeID: id.String(),
+		PostID: like.PostID,
+		UserID: like.UserID,
 	}
 
 	// insert new like in DB
@@ -94,9 +94,9 @@ func (r *ReactionService) CreateDislikeInPost(dislike *models.Dislike) error {
 
 	// new dislike
 	newReaction := &models.Dislike{
-		DisLikeId: id.String(),
-		PostId:    dislike.PostId,
-		UserId:    dislike.UserId,
+		DislikeID: id.String(),
+		PostID:    dislike.PostID,
+		UserID:    dislike.UserID,
 	}
 
 	// insert new dislike in DB
@@ -133,12 +133,12 @@ func (r *ReactionService) CreateCommentInPost(comment *models.Comment) error {
 
 	// new comment
 	newComment := &models.Comment{
-		CommentId:   id.String(),
-		PostId:      comment.PostId,
-		Author:      comment.Author,
-		CommentText: comment.CommentText,
-		Likes:       0,
-		DisLikes:    0,
+		CommentID:    id.String(),
+		PostID:       comment.PostID,
+		Author:       comment.Author,
+		CommentText:  comment.CommentText,
+		LikeCount:    0,
+		DislikeCount: 0,
 	}
 	// insert new comment in DB
 	err = r.ReactionRepo.InsertCommentInPost(newComment)
@@ -177,9 +177,9 @@ func (r *ReactionService) CreateLikeInComment(reaction *models.CommentLike) erro
 		return models.ErrUUIDCreate
 	}
 	commentLike := &models.CommentLike{
-		LikeId:    id.String(),
-		CommentId: reaction.CommentId,
-		UserId:    reaction.UserId,
+		LikeID:    id.String(),
+		CommentID: reaction.CommentID,
+		UserID:    reaction.UserID,
 	}
 
 	err = r.ReactionRepo.InsertLikeInComment(commentLike)
@@ -237,9 +237,9 @@ func (r *ReactionService) CreateDisLikeInComment(reaction *models.CommentDislike
 	}
 
 	dislike := &models.CommentDislike{
-		DisLikeId: id.String(),
-		CommentId: reaction.CommentId,
-		UserId:    reaction.UserId,
+		DislikeID: id.String(),
+		CommentID: reaction.CommentID,
+		UserID:    reaction.UserID,
 	}
 
 	err = r.ReactionRepo.InsertDisLikeInComment(dislike)

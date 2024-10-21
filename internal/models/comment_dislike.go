@@ -1,8 +1,8 @@
 package models
 
 type CommentDisLike struct {
-	DisLikeId string
-	CommentId string
-	UserId    string
+	DislikeID string
+	CommentID string
+	UserID    string
 	CreatedAt string
 }

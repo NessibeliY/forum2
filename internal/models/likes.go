@@ -1,8 +1,8 @@
 package models
 
 type Likes struct {
-	LikeId    string
-	PostId    string
-	UserId    string
+	LikeID    string
+	PostID    string
+	UserID    string
 	CreatedAt string
 }

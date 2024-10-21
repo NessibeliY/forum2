@@ -11,10 +11,10 @@ import (
 func NewTemplateCache(l *logger.Logger) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob(filepath.Join("./templates/*.html"))
+	pages, err := filepath.Glob("./templates/*.html")
 	if err != nil {
 		l.Error("glob filepath .html", err)
-		return nil, fmt.Errorf("glob filepath: ", err)
+		return nil, fmt.Errorf("glob filepath: %w", err)
 	}
 
 	for _, page := range pages {
@@ -32,7 +32,7 @@ func NewTemplateCache(l *logger.Logger) (map[string]*template.Template, error) {
 		ts, err := template.ParseFiles(files...)
 		if err != nil {
 			l.Error("parse html page", page, err)
-			return nil, fmt.Errorf("parse html: ", err)
+			return nil, fmt.Errorf("parse html: %w", err)
 		}
 
 		cache[name] = ts

@@ -9,13 +9,13 @@ import (
 func (h *Handler) Render(w http.ResponseWriter, page string, data interface{}) {
 	ts, ok := h.cache[page]
 	if !ok {
-		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
+		// h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
 
 	err := ts.ExecuteTemplate(w, page, data)
 	if err != nil {
-		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
+		// h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
 }
@@ -75,4 +75,19 @@ func (h *Handler) GetComment(post_id, user_name, user_id string) []models.Commen
 	}
 
 	return comments
+}
+
+func (h *Handler) CheckPostReaction(post *models.Post, userID string) {
+	existLike := h.service.ReactionService.LikeExistInPost(post.PostID, userID)
+	existDisLike := h.service.ReactionService.DisLikeExistInPost(post.PostID, userID)
+
+	if existLike {
+		post.IsLike = existLike
+	}
+
+	if existDisLike {
+		post.IsDisLike = existDisLike
+	}
+
+	// return post
 }

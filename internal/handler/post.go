@@ -131,7 +131,9 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
+
+	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
 
 func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
@@ -179,7 +181,9 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
+
+	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
@@ -188,11 +192,16 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		query, err := url.ParseQuery(r.URL.RawQuery)
 		if err != nil {
-			fmt.Println("ERR", err)
+			h.logger.Info("parse query", err)
+			h.ErrorHandler(w, http.StatusBadRequest, "Status Bad Request")
 			return
 		}
 
 		post_id := query.Get("post-id")
+		if post_id == "" {
+			h.ErrorHandler(w, http.StatusBadRequest, "Missing post ID")
+			return
+		}
 		data := models.Login{IsAuth: false} // default user not auth
 
 		if !ok {
@@ -222,9 +231,12 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 
 		post, err := h.service.PostService.GetPostByPostID(post_id)
 		if err != nil {
-			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
+			h.ErrorHandler(w, http.StatusBadRequest, "Status Bad Request")
+			// h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 			return
 		}
+
+		h.CheckPostReaction(post, data.Id)
 
 		data.Post = *post
 
@@ -300,6 +312,10 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = r.ParseForm()
+	if err != nil {
+		h.ErrorHandler(w, http.StatusBadRequest, "Bad Request")
+	}
 	commentId := r.FormValue("commentId")
 	postID := r.FormValue("PostId")
 
@@ -439,7 +455,7 @@ func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	commentId := r.FormValue("CommentId")
+	commentId := r.FormValue("commentId")
 	postID := r.Form.Get("PostId")
 
 	err = h.service.ReactionService.DeleteComment(commentId)

@@ -24,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	l, err := logger.Setup(config)
+	l, err := logger.Setup(config, os.Stdout)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,11 +44,11 @@ func main() {
 	handler := handler.NewHandler(l, s, tmplCache)
 	srv := server.NewServer(l)
 
-	//to capture errors from the server
+	// to capture errors from the server
 	serverErrors := make(chan error, 1)
 
 	go func() {
-		serverErrors <- srv.RunServer("8082", handler.Routes())
+		serverErrors <- srv.RunServer("8080", handler.Routes())
 	}()
 
 	gracefulShutdown(l, srv, serverErrors)

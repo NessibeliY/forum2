@@ -19,10 +19,10 @@ func NewUserService(userRepo models.UserRepository) *UserService {
 }
 
 func (u *UserService) SignUpUser(signupRequest *models.SignupRequest) error {
-	existingUser, err := u.UserRepo.GetUserByEmail(signupRequest.Email)
-	if err != nil {
-		return err
-	}
+	existingUser, _ := u.UserRepo.GetUserByEmail(signupRequest.Email)
+	// if err != nil {
+	// 	return err
+	// }
 	if existingUser != nil && (existingUser.Email == signupRequest.Email || existingUser.UserName == signupRequest.UserName) {
 		return models.ErrUserExists
 	}

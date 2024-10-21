@@ -16,42 +16,39 @@
 <body> 
     {{ template "header" .}}
     <main class="main_container">
-        <div class="offset py-6">
-           <div class="flex w-full py-4">
+           <div class="offset">
                 <!--LIST OF TAGS  -->
-                <div class="w-1/6 h-72 py-4 px-2 bg-white py-2 px-2 mt-2 card">
+                <div class="tags card">
                     <h3 class="font-semibold">Tags</h3>
                     {{range .Categories}}
                         <form action="/user/posts/" method="GET" class="flex">
                             <input type="hidden" name="filter" value="{{.CategoryName}}">
-                            <button class="cursor-pointer hover:text-blue-600 duration-400 transition" type="submit">#{{.CategoryName}}</button>
+                            <button class="categories" type="submit">#{{.CategoryName}}</button>
                         </form>
                     {{end}}
                 </div>
                 <!-- IF USER AUTH SHOW THIS BLOCK -->
-                <div class="w-4/6 py-2 px-2 mr-3 ml-3 flex flex-col">
-                    {{if .IsAuth}}
-                    <div class="bg-white w-full py-4 px-3 flex items-center justify-between mb-5 card">
-                        <div>
-                            <h2 class="text-4xl font-medium tracking-tight">Hi, {{ .UserName}}</h2>
-                            <span class="text-xl">Glad to see you</span>
-                        </div>
-                        <a href="/create-post" class="bg-green-600 hover:bg-green-700 
-                            transition duration-300 py-2 px-2 rounded-lg text-white flex items-center" id="openModalBtn">
-                            <i class="fa-solid fa-plus mr-1 text-xl"></i> Create post
-                        </a>
-                    </div>
-                    {{end}}
-                    <div class="flex flex-col w-full">
+                <div class="middleContainer">
+                    <div class="flex_full_col">
                         {{ template "posts" .}}
                     </div>
                 </div>
                 {{if .IsAuth}}
-                <div class="w-1/6 h-96 bg-white mt-2 card">
-                    {{ template "user_info" .}}
+                <div class="rSide">
+                    <div class="welcome card">
+                        <div>
+                            <h2 class="welcome_text" style="font-weight: 600; font-size: xx-large;">Hi, mmmm</h2>
+                            <span style="font-size: larger;">Glad to see you!</span>                        </div>
+                        <a href="/create-post" class="createButton" id="openModalBtn">
+                            <i class="fa-solid fa-plus mr-1 text-xl"></i> Create post
+                        </a>
+                    </div>
+                    <div class="userInfo card">
+                        {{ template "user_info" .}}
+                    </div>
                 </div>
-                {{end}}
-           </div>
+
+            {{end}}
         </div>
     </main>
 </body>

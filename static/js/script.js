@@ -13,6 +13,7 @@ dropdown.forEach(dropdown => {
           const formDel = document.getElementById(targetId);        
           if (formDel) {
               formDel.style.display = formDel.style.display === 'flex' ? 'none' : 'flex';
+              console.log("open")
           }
       }
   });
@@ -41,6 +42,7 @@ del_btn_modals.forEach((btn) => {
     const modalId = btn.getAttribute('data-modal');
     const modal = document.getElementById(modalId);
     if (modal) {
+      console.log("this")
       modal.style.display = "flex";
     } else {
       console.error(`No modal found for button with modal ID: ${modalId}`);
@@ -76,17 +78,5 @@ window.onclick = function(event) {
     event.target.style.display = "none";
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 

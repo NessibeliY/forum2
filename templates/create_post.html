@@ -17,27 +17,24 @@
 <body>
     {{ template "header" .}}
     <main class="main_container">
-        <div class="offset py-6">
-           <div class="flex w-full overflow-auto">
+        <div class="offset" style="justify-content: space-between;">
                 <!--LIST OF TAGS  -->
                    <!--LIST OF TAGS  -->
-                <div class="w-1/6 h-72 py-4 px-2 bg-white rounded-lg py-2 px-2 mt-2">
-                    <h3>Tags</h3>
+                   <div class="tags card">
+                    <h3 class="font-semibold">Tags</h3>
                     {{range .Categories}}
-                        <form action="/user/posts/" method="GET" class="flex">
-                            <input type="hidden" name="filter" value="{{.CategoryName}}">
-                            <button class="cursor-pointer hover:text-red-600 duration-300 transition" type="submit">#{{.CategoryName}}</button>
-                        </form>
-                    {{end}}
+                    <form action="/user/posts/" method="GET" class="flex">
+                        <input type="hidden" name="filter" value="{{.CategoryName}}">
+                        <button class="categories" type="submit">#{{.CategoryName}}</button>
+                    </form>
+                {{end}}
                 </div>
-                <div class="w-4/6 py-2 px-2 mr-3 ml-3 flex flex-col">     
-                    <div class="bg-white w-full py-4 px-3 flex items-center justify-between rounded-lg shadow-lg mb-5">
-                        <div  class="crete_post">
-                            <div class="crete_post_content">
+                <div class="create_container" style="width: 50%;">     
+                        <div style="width: 100%">
                                 <div class="flex items-center justify-between w-full">
                                     <span class="text-bold text-2xl">CREATE POST</span>
                                 </div>
-                                <form class="w-full py-2 px-2 flex flex-col" action="/create-post" method="POST" id="postForm">
+                                <form class="create_form" action="/create-post" method="POST" id="postForm">
                                     <div class="mt-2 w-full flex flex-col">
                                         <label for="" class="block text-base mb-2">TITLE</label>
                                         <input 
@@ -48,7 +45,7 @@
                                             name="title"
                                             value="{{.Post.Title}}"
                                             />
-                                        <label class="text-red-600 my-2"> {{ .Error.Title}}</label>
+                                        <label class="text-red-600 my-2"> {{ .ErrorMessages.Title}}</label>
                                     </div>
                                     <div class="w-full flex flex-col">
                                         <p class="my-2 text text-base">TAGS</p>
@@ -64,7 +61,7 @@
                                             <label for="{{.CategoryName}}" class="cursor-pointer">{{.CategoryName}}</label>
                                         </div>
                                         {{end}}
-                                        <label class="text-red-600 my-2"> {{ .Error.Tags}}</label>
+                                        <label class="text-red-600 my-2"> {{ .ErrorMessages.Tags}}</label>
                                     </div>
                                     <div class="mt-2 w-full flex flex-col">
                                         <label for="description" class="block text-base mb-2">DESCRIPTION</label>
@@ -76,25 +73,23 @@
                                         >
                                             {{.Post.Description}}
                                         </textarea>
-                                        <label class="text-red-600 my-2"> {{ .Error.Description }}</label>
+                                        <label class="text-red-600 my-2"> {{ .ErrorMessages.Description }}</label>
                                     </div>
-                                    <div class="mt-3 w-full flex justify-end">
-                                        <a href="/" class="bg-red-600 hover:bg-red-700 
-                                        transition duration-300 py-2 px-2 rounded-lg text-white mr-2 ml-2">cancel</a>
-                                        <button class="bg-green-600 hover:bg-green-700 
-                                        transition duration-300 py-2 px-2 rounded-lg text-white mr-2 ml-2" type="submit">create</button>
+                                    <div style="display: flex; justify-content: start;">
+                                        <a href="/" class="btn_create btn_auth ">cancel</a>
+                                        <button class="btn_create btn_auth" type="submit">create</button>
                                     </div>
                                 </form>
-                            </div>
+                       
                         </div>                      
-                    </div>
                 </div>
                 {{if .IsAuth}}
-                <div class="w-1/6 h-96 bg-white rounded-lg mt-2">
-                    {{ template "user_info" .}}
+                <div class="rSide">
+                    <div class="userInfo card">
+                        {{ template "user_info" .}}
+                    </div>
                 </div>
                 {{end}}       
-           </div>
         </div>
     </main>
 </body>

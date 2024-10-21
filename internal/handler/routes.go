@@ -17,6 +17,7 @@ func (h *Handler) Routes() http.Handler {
 	router.HandleFunc("/like", h.SessionAuthMiddleware(http.HandlerFunc(h.Like)))
 	router.HandleFunc("/dislike", h.SessionAuthMiddleware(http.HandlerFunc(h.DisLike)))
 	router.HandleFunc("/post/", h.SessionAuthMiddleware(http.HandlerFunc(h.Post))) // get post by ID
+
 	router.HandleFunc("/add-comment/", h.SessionAuthMiddleware(http.HandlerFunc(h.AddComment)))
 	router.HandleFunc("/comment/like", h.SessionAuthMiddleware(http.HandlerFunc(h.CommentLike)))
 	router.HandleFunc("/comment/dislike", h.SessionAuthMiddleware(http.HandlerFunc(h.CommentDisLike)))

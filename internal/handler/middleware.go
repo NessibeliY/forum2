@@ -12,14 +12,14 @@ func (h *Handler) SessionAuthMiddleware(next http.Handler) http.HandlerFunc {
 		// get cookie
 		c, err := r.Cookie(string(models.SessionKey))
 		if err != nil {
-			h.logger.Error("check session in middleware", err)
+			h.logger.Info("check session in middleware", err)
 			next.ServeHTTP(w, r)
 			return
 		}
 
 		session, err := h.service.SessionService.GetSessionByToken(c.Value)
 		if err != nil {
-			h.logger.Error("Session not found in middleware", err)
+			h.logger.Info("Session not found in middleware", err)
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -27,4 +27,8 @@ func (h *Handler) SessionAuthMiddleware(next http.Handler) http.HandlerFunc {
 		ctx := context.WithValue(r.Context(), models.SessionKey, *session)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func (h *Handler) NoOpMiddleware(next http.Handler) http.Handler {
+	return next
 }

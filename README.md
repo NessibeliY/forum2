@@ -65,6 +65,7 @@ Or run the project with Docker:
    ```bash
     make build
     make run
+   ```
 
 ## Authors
 

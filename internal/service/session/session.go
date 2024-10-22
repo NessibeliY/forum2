@@ -1,6 +1,7 @@
 package session
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -8,7 +9,7 @@ import (
 	"forum/internal/models"
 )
 
-type SessionService struct {
+type SessionService struct { //nolint:revive
 	SessionRepo models.SessionRepository
 }
 
@@ -18,63 +19,67 @@ func NewSessionService(sessionRepo models.SessionRepository) *SessionService {
 	}
 }
 
-func (s *SessionService) SetSession(UserID string) (*models.Session, error) {
-	err := s.SessionRepo.DeleteSessionByUserID(UserID)
+func (s *SessionService) SetSession(userID string) (*models.Session, error) {
+	err := s.SessionRepo.DeleteSessionByUserID(userID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("delete session: %w", err)
 	}
 
-	session, err := s.createSession(UserID)
+	session, err := s.createSession(userID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("create session: %w", err)
 	}
 
 	return session, nil
 }
 
-func (s *SessionService) createSession(UserID string) (*models.Session, error) {
+func (s *SessionService) createSession(userID string) (*models.Session, error) {
 	id, err := uuid.NewV4()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("generate uuid: %w", err)
 	}
 
 	token, err := uuid.NewV4()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("generate token uuid: %w", err)
 	}
 
-	expire_time := time.Now().Add(time.Hour * 2)
+	expireTime := time.Now().Add(time.Hour * 2)
 	session := models.Session{
-		SessionId:  id.String(),
-		UserID:     UserID,
+		SessionID:  id.String(),
+		UserID:     userID,
 		Token:      token.String(),
-		ExpireTime: expire_time,
+		ExpireTime: expireTime,
 	}
 
 	if err = s.SessionRepo.AddSession(session); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("add session: %w", err)
 	}
 
-	new_session, err := s.SessionRepo.GetSessionByToken(token.String())
+	newSession, err := s.SessionRepo.GetSessionByToken(token.String())
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get session by token: %w", err)
 	}
-	return new_session, err
+	return newSession, nil
 }
 
 func (s *SessionService) GetSessionByToken(token string) (*models.Session, error) {
 	session, err := s.SessionRepo.GetSessionByToken(token)
 	if err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 	return session, nil
 }
 
-func (s *SessionService) GetSessionByUserId(user_id string) (*models.Session, error) {
-	session, err := s.SessionRepo.GetSessionById(user_id)
+func (s *SessionService) GetSessionByUserID(userID string) (*models.Session, error) {
+	session, err := s.SessionRepo.GetSessionByID(userID)
 	if err != nil {
-		return nil, err
+		return nil, err //nolint:wrapcheck
 	}
 
-	return session, err
+	return session, nil
+}
+
+func (s *SessionService) DeleteSessionByToken(token string) error {
+	return s.SessionRepo.DeleteSessionByUserID(token) //nolint:wrapcheck
 }

@@ -8,7 +8,7 @@ import (
 	"forum/internal/models"
 )
 
-type PostService struct {
+type PostService struct { //nolint:revive
 	PostRepo models.PostRepository
 }
 
@@ -19,12 +19,7 @@ func NewPostService(postRepo models.PostRepository) *PostService {
 }
 
 func (p *PostService) GetPostsByCategory(tag string) ([]models.Post, error) {
-	posts, err := p.PostRepo.GetPostsByCategory(tag)
-	if err != nil {
-		return nil, err
-	}
-
-	return posts, err
+	return p.PostRepo.GetPostsByCategory(tag) //nolint:wrapcheck
 }
 
 func (p *PostService) CreatePost(createPostRequest *models.CreatePostRequest) error {
@@ -47,134 +42,96 @@ func (p *PostService) CreatePost(createPostRequest *models.CreatePostRequest) er
 
 	err = p.PostRepo.AddPost(*newPost)
 	if err != nil {
-		return err
+		return fmt.Errorf("add post: %w", err)
 	}
 	return nil
 }
 
-func (p *PostService) DeletePostByPostID(post_id string) error {
-	err := p.PostRepo.DeletePostByPostID(post_id)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (p *PostService) DeletePostByPostID(postID string) error {
+	return p.PostRepo.DeletePostByPostID(postID) //nolint:wrapcheck
 }
 
-func (p *PostService) IncrementLikeCount(post_id string) error {
-	err := p.PostRepo.IncrementLikeCount(post_id)
+func (p *PostService) IncrementPostLikeCount(postID string) error {
+	err := p.PostRepo.IncrementPostLikeCount(postID)
 	if err != nil {
-		return err
+		return fmt.Errorf("increment post like count: %w", err)
 	}
-	err = p.DecrementDislikeCount(post_id)
+	err = p.DecrementPostDislikeCount(postID)
 	if err != nil {
-		return err
+		return fmt.Errorf("decrement post dislike count: %w", err)
 	}
 	return nil
 }
 
-func (p *PostService) DecrementLikeCount(post_id string) error {
-	err := p.PostRepo.DecrementLikeCount(post_id)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (p *PostService) DecrementPostLikeCount(postID string) error {
+	return p.PostRepo.DecrementPostLikeCount(postID) //nolint:wrapcheck
 }
 
-func (p *PostService) IncrementDislikeCount(post_id string) error {
-	err := p.PostRepo.IncrementDislikeCount(post_id)
+func (p *PostService) IncrementPostDislikeCount(postID string) error {
+	err := p.PostRepo.IncrementPostDislikeCount(postID)
 	if err != nil {
-		return err
+		return fmt.Errorf("increment post dislike count: %w", err)
 	}
-	err = p.DecrementLikeCount(post_id)
+	err = p.DecrementPostLikeCount(postID)
 	if err != nil {
-		return err
+		return fmt.Errorf("decrement post like count: %w", err)
 	}
 
 	return nil
 }
 
-func (p *PostService) DecrementDislikeCount(post_id string) error {
-	err := p.PostRepo.DecrementDislikeCount(post_id)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (p *PostService) DecrementPostDislikeCount(postID string) error {
+	return p.PostRepo.DecrementPostDislikeCount(postID) //nolint:wrapcheck
 }
 
-func (p *PostService) IncrementCommentCount(post_id string) error {
-	err := p.PostRepo.IncrementCommentCount(post_id)
-	if err != nil {
-		return err
-	}
-	return nil
+func (p *PostService) IncrementCommentCount(postID string) error {
+	return p.PostRepo.IncrementCommentCount(postID) //nolint:wrapcheck
 }
 
-func (p *PostService) DecrementCommentCount(post_id string) error {
-	err := p.PostRepo.DecrementCommentCount(post_id)
-	if err != nil {
-		return err
-	}
-	return nil
+func (p *PostService) DecrementCommentCount(postID string) error {
+	return p.PostRepo.DecrementCommentCount(postID) //nolint:wrapcheck
 }
 
 func (p *PostService) GetAllPosts(postPerPage, offset int) ([]models.Post, error) {
-	posts, err := p.PostRepo.GetAllPosts(postPerPage, offset)
-	if err != nil {
-		return nil, err
-	}
-
-	return posts, nil
+	return p.PostRepo.GetAllPosts(postPerPage, offset) //nolint:wrapcheck
 }
 
 func (p *PostService) GetAllCategories() (*[]models.Categories, error) {
-	posts, err := p.PostRepo.GetAllCategories()
-	if err != nil {
-		return nil, err
-	}
-
-	return posts, nil
+	return p.PostRepo.GetAllCategories() //nolint:wrapcheck
 }
 
 func (p *PostService) GetPostsByUsername(username string) ([]models.Post, error) {
-	post, err := p.PostRepo.GetPostsByUsername(username)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	return post, nil
+	return p.PostRepo.GetPostsByUsername(username) //nolint:wrapcheck
 }
 
-func (p *PostService) GetPostsLikedByUser(user_id string) ([]models.Post, error) {
-	posts, err := p.PostRepo.GetPostsLikedByUser(user_id)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	}
-	return posts, nil
+func (p *PostService) GetPostsLikedByUser(userID string) ([]models.Post, error) {
+	return p.PostRepo.GetPostsLikedByUser(userID) //nolint:wrapcheck
 }
 
-func (p *PostService) GetPostsDislikedByUser(user_id string) ([]models.Post, error) {
-	posts, err := p.PostRepo.GetPostsDislikedByUser(user_id)
-	if err != nil {
-		return nil, fmt.Errorf("%v", err)
-	}
-	return posts, nil
+func (p *PostService) GetPostsDislikedByUser(userID string) ([]models.Post, error) {
+	return p.PostRepo.GetPostsDislikedByUser(userID) //nolint:wrapcheck
 }
 
-func (p *PostService) GetPostByPostID(post_id string) (*models.Post, error) {
-	post, err := p.PostRepo.GetPostByPostID(post_id)
-	if err != nil {
-		return nil, err
-	}
-
-	return post, err
+func (p *PostService) GetPostByPostID(postID string) (*models.Post, error) {
+	return p.PostRepo.GetPostByPostID(postID) //nolint:wrapcheck
 }
 
 func (p *PostService) GetPostsCount() (int, error) {
-	count, err := p.PostRepo.GetPostsCount()
+	return p.PostRepo.GetPostsCount() //nolint:wrapcheck
+}
+
+func (p *PostService) PopulatePostData(postID string, data *models.Login) error {
+	categories, err := p.GetAllCategories()
 	if err != nil {
-		return 0, err
+		return fmt.Errorf("get all categories: %w", err)
 	}
-	return count, nil
+	data.Categories = *categories
+
+	post, err := p.GetPostByPostID(postID)
+	if err != nil {
+		return fmt.Errorf("get post by post id: %w", err)
+	}
+	data.Post = *post
+
+	return nil
 }

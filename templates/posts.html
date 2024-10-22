@@ -14,7 +14,7 @@
                     <span class="text-base text-slate-400 font-extralight italic">{{ .Posts.CreatedAt.Format "02-01-2006 15:04"}}</span>
                 </div>
                 <!-- CHECK IF USER IS OWNER -->
-                {{if eq .OwnerId .Posts.UserID}}
+                {{if eq .OwnerID .Posts.UserID}}
                     <div class="text-xl dropdown">
                         <i class="fa-solid fa-bars" data-target="dropdown-{{.Posts.PostID}}"></i>
                         <div class="select_menu " id="dropdown-{{.Posts.PostID}}">
@@ -75,11 +75,11 @@
                     <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                     {{if .Posts.IsDisLike}}
                     <button class="btn_like btn_like_active" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikesCount}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked({{.Posts.DislikesCount}})
                     </button>
                     {{else}}
                     <button class="btn_like" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikesCount}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked({{.Posts.DislikesCount}})
                     </button>
                     {{end}}
                 </form>

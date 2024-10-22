@@ -1,7 +1,7 @@
 package models
 
 type Login struct {
-	Id                 string
+	ID                 string
 	IsAuth             bool
 	Username           string
 	Categories         []Categories

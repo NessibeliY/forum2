@@ -11,18 +11,16 @@ const AllPostsNavigation = "all"
 
 func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		h.logger.Info("Page not found", "home page")
 		h.ErrorHandler(w, http.StatusNotFound, "Whoops...Page not found")
 		return
 	}
 
 	if r.Method != http.MethodGet {
-		h.logger.Info("Method not allowed", "home page")
 		h.ErrorHandler(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
 
-	data := models.Login{IsAuth: false} // default user not auth
+	data := models.Login{IsAuth: false} // default user not authenticated
 	pageStr := r.URL.Query().Get("page")
 	var page int
 	if pageStr == "" {
@@ -39,7 +37,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 
 	totalPosts, err := h.service.PostService.GetPostsCount()
 	if err != nil {
-		h.logger.Info("Error fetching total post count", "home page")
+		h.logger.Errorf("get posts count: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
@@ -51,6 +49,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 
 	posts, err := h.service.PostService.GetAllPosts(postsPerPage*totalPages, offset)
 	if err != nil {
+		h.logger.Errorf("get all posts: %v", err)
 		posts = []models.Post{}
 	}
 
@@ -67,19 +66,19 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data.Username = user.Username
-		data.Id = s.UserID
+		data.ID = s.UserID
 	}
 
 	// get tags list
 	categories, err := h.service.PostService.GetAllCategories()
 	if err != nil {
-		h.logger.Info("Get categories/tags", "home page")
+		h.logger.Errorf("get all categories: %v", err)
 		data.Categories = nil
 	}
 	data.Categories = *categories
 
 	// get post and comment
-	data.Posts = h.ResponseData(posts, data.Username, data.Id)
+	data.Posts = h.ResponseData(posts, data.Username, data.ID)
 	// defalut value current page
 	data.CurrentPage = AllPostsNavigation
 	data.ShowCreatePostForm = false
@@ -92,7 +91,6 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		h.logger.Info("Method not allowed", "GetUserActivity handler")
 		h.ErrorHandler(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
 	}
@@ -103,7 +101,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	var posts []models.Post
 	posts, err := h.service.PostService.GetPostsByCategory(filter)
 	if err != nil {
-		h.logger.Info("Get post by tags", "GetUserActivity handler")
+		h.logger.Errorf("get posts by category: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 		return
 	}
@@ -117,7 +115,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 
 		user, _ := h.service.UserService.GetUserByUserID(s.UserID)
 		data.Username = user.Username
-		data.Id = s.UserID
+		data.ID = s.UserID
 
 		switch filter {
 		case AllPostsNavigation:
@@ -126,7 +124,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 			posts, err = h.service.PostService.GetPostsByUsername(user.Username)
 			data.CurrentPage = "my"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'my'", "GetUserActivity Handler", err)
+				h.logger.Errorf("get posts by username: %v", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
@@ -134,7 +132,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 			posts, err = h.service.PostService.GetPostsLikedByUser(user.ID)
 			data.CurrentPage = "liked"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'liked'", "GetUserActivity Handler", err)
+				h.logger.Errorf("get posts liked by user: %v", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
@@ -142,7 +140,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 			posts, err = h.service.PostService.GetPostsDislikedByUser(user.ID)
 			data.CurrentPage = "disliked"
 			if err != nil {
-				h.logger.Info("Get post by user name - 'disliked'", "GetUserActivity Handler", err)
+				h.logger.Errorf("get posts disliked by user: %v", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
@@ -155,7 +153,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	data.Categories = *categories
 
 	// get post and comment
-	data.Posts = h.ResponseData(posts, data.Username, data.Id)
+	data.Posts = h.ResponseData(posts, data.Username, data.ID)
 
 	h.Render(w, "index.html", data)
 }

@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS comment_dislikes(
 );
 
 
-INSERT INTO comments(comment_id, post_id, author, comment_text, likes_count, dislikes_count, created_at, updated_at)
-VALUES('1', '', 'author', 'This is a comment\nwith a new line', 0, 0, datetime('now', 'localtime'), datetime('now', 'localtime'));
+-- INSERT INTO comments(comment_id, post_id, author, comment_text, likes_count, dislikes_count, created_at, updated_at)
+-- VALUES('1', '', 'author', 'This is a comment\nwith a new line', 0, 0, datetime('now', 'localtime'), datetime('now', 'localtime'));
 
 INSERT OR IGNORE INTO categories (category_name) 
 VALUES ('Art'), ('Music'), ('Cinema'), ('Dance'), ('Architecture'), ('Fashion'), ('Graphics'), ('Cooking'),('IT'),('Life');

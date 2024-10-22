@@ -55,11 +55,11 @@
                         <input type="hidden" name="PostID" value="{{.Post.PostID}}">
                         {{if .Post.IsDisLike}}
                         <button class="btn_like btn_like_active text-2x" type="submit">
-                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.DislikesCount}})
+                            <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked({{.Post.DislikesCount}})
                         </button>
                         {{else}}
                         <button class="btn_like text-white text-2xl" type="submit">
-                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Post.DislikesCount}})
+                            <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked({{.Post.DislikesCount}})
                         </button>
                         {{end}}
                     </form>
@@ -100,8 +100,8 @@
                                             
                                         </div>
                                     </div>
-                                    <!-- Check if the comment's ownerId matches the current user -->
-                                    {{if eq .OwnerId .Author}} 
+                                    <!-- Check if the comment's OwnerID matches the current user -->
+                                    {{if eq .OwnerID .Author}}
                                         <div class="text-xl dropdown">
                                             <i class="fa-solid fa-bars" data-target="dropdown-{{.CommentID}}"></i>
                                             <div class="select_menu" id="dropdown-{{.CommentID}}">
@@ -140,11 +140,11 @@
                                         <input type="hidden" name="PostID" id="post-id-like" value="{{$.Post.PostID}}">
                                         {{if .IsLiked}}
                                         <button class="btn_like_com btn_like_active">
-                                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked ({{ .Likes }})                            
+                                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked ({{ .LikesCount }})
                                         </button>
                                         {{ else }}
                                         <button class="btn_like_com">
-                                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked ({{.Likes}})
+                                            <i class="fa-regular fa-thumbs-up mx-1"></i> Liked ({{.LikesCount}})
                                         </button>
                                         {{ end }}
                                     </form>
@@ -153,11 +153,11 @@
                                         <input type="hidden" name="PostID" id="post-id-like" value="{{$.Post.PostID}}">
                                         {{if .DisLiked}}
                                         <button class="btn_like_com btn_like_active">
-                                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked ({{.DisLikes}})
+                                            <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked ({{.DislikesCount}})
                                         </button>     
                                         {{else}}
                                         <button class="btn_like_com">
-                                            <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked ({{ .DisLikes}})
+                                            <i class="fa-regular fa-thumbs-down mx-1"></i>Disliked ({{ .DislikesCount}})
                                         </button>
                                         {{end}}    
                                     </form>

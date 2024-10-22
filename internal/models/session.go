@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Session struct {
-	SessionId  string
+	SessionID  string
 	UserID     string
 	Token      string
 	ExpireTime time.Time
@@ -11,13 +11,13 @@ type Session struct {
 
 type SessionRepository interface {
 	AddSession(session Session) error
-	DeleteSessionByUserID(user_id string) error
-	GetSessionById(user_id string) (*Session, error)
+	DeleteSessionByUserID(userID string) error
+	GetSessionByID(userID string) (*Session, error)
 	GetSessionByToken(token string) (*Session, error)
 }
 
 type SessionService interface {
-	SetSession(UserID string) (*Session, error)
+	SetSession(userID string) (*Session, error)
 	GetSessionByToken(token string) (*Session, error)
-	GetSessionByUserId(user_id string) (*Session, error)
+	GetSessionByUserID(userID string) (*Session, error)
 }

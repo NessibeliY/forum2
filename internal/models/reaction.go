@@ -27,7 +27,7 @@ type Comment struct {
 	UpdatedAt     time.Time
 	IsLiked       bool
 	DisLiked      bool
-	OwnerId       string
+	OwnerID       string
 }
 
 type CommentLike struct {
@@ -46,59 +46,62 @@ type CommentDislike struct {
 
 type ReactionRepository interface {
 	// like in post
-	InsertLikePost(like *Like) error
-	LikeExistInPost(postID, userID string) bool
-	DeleteLike(postID, userID string) error
+	AddPostLike(like Like) error
+	IsPostLikedByUser(postID, userID string) bool
+	RemovePostLike(postID, userID string) error
 	// dislike in post
-	InsertDisLikePost(disLike *Dislike) error      // insert new dislike
-	DislikeExistInPost(postID, userID string) bool // check dislike current post from user
-	DeleteDislike(postID, userID string) error     // delete dislike
+	AddPostDislike(disLike *Dislike) error
+	IsPostDislikedByUser(postID, userID string) bool
+	RemovePostDislike(postID, userID string) error
 	// comments in post
-	InsertCommentInPost(comment *Comment) error   // insert new comment
-	GetCommentsByID(id string) ([]Comment, error) // get comment list by postID
-	DeleteComment(commentID string) error         // delete comment
-	DeleteCommentByPostID(postID string) error    // delete comment by POST ID
+	AddComment(comment *Comment) error
+	GetCommentsByPostID(id string) ([]Comment, error)
+	RemoveCommentByCommentID(commentID string) error
+	RemoveCommentByPostID(postID string) error
 	// like in comment
-	InsertLikeInComment(reaction *CommentLike) error    // insert new like in comment
-	IncrementLikeInComment(commentID string) error      // increment like in comment
-	DecrementLikeCountInComment(commentID string) error // decrement like in comment
-	ExistLikeInComment(userID, commentID string) bool   // check exist like in comment from current user
-	DeleteLikeInComment(commentID, userID string) error // delete dislike in comment
-	DeleteLikeInCommentByUserID(userID string) error    // delete Like In Comment By Post ID
+	AddCommentLike(reaction *CommentLike) error
+	IncrementLikeCountInComment(commentID string) error
+	DecrementLikeCountInComment(commentID string) error
+	IsCommentLikedByUser(userID, commentID string) bool
+	RemoveCommentLike(commentID, userID string) error
+	RemoveAllCommentLikesByUser(userID string) error
 	// dislike in comment
-	InsertDislikeInComment(reaction *CommentDislike) error // insert dislike in comment
-	IncrementDislikeCountInComment(commentID string) error // increment dislike in comment
-	DecrementDislikeCountInComment(commentID string) error // decrement dislike in comment
-	ExistDisLikeInComment(userID, commentID string) bool   // check exist dislike in comment from current user
-	DeleteDisLikeInComment(commentID, userID string) error
-	DeleteDisLikeInCommentByUserID(userID string) error
+	AddCommentDislike(reaction *CommentDislike) error
+	IncrementDislikeCountInComment(commentID string) error
+	DecrementDislikeCountInComment(commentID string) error
+	IsCommentDislikedByUser(userID, commentID string) bool
+	RemoveCommentDislike(commentID, userID string) error
+	RemoveAllCommentDislikesByUser(userID string) error
 }
 
 type ReactionService interface {
 	// delete reaction
 	DeleteReaction(postID, userID string) error
 	// like in post
-	CreateLikeInPost(like *Like) error            // create like in post
-	LikeExistInPost(postID, userID string) bool   // check like exist in post
-	DeleteLikeInPost(postID, userID string) error // delete like in post
+	HandlePostLike(userID, postID string) error
+	IsPostLikedByUser(postID, userID string) bool
+	DeleteLikeInPost(postID, userID string) error
 	// dislike in post
-	CreateDislikeInPost(dislike *Dislike) error    // create dislike in post
-	DislikeExistInPost(postID, userID string) bool // check dislike exist in post
-	DeleteDislike(postID, userID string) error     // delete dislike in post
+	HandlePostDislike(userID, postID string) error
+	IsPostDislikedByUser(postID, userID string) bool
+	RemovePostDislike(postID, userID string) error
 	// comment
-	CreateCommentInPost(comment *Comment) error       // create comment in post
-	GetCommentsByID(postID string) ([]Comment, error) // get comment list by POST ID
-	DeleteComment(commentID string) error
+	GetCommentsWithReactions(postID, username, userID string) []Comment
+	CreateCommentInPost(comment *Comment) error
+	GetCommentsByPostID(postID string) ([]Comment, error)
+	RemoveCommentByCommentID(commentID string) error
 	// like in comment
-	CreateLikeInComment(reaction *CommentLike) error    // create  like in comment
-	IncrementLikeInComment(commentID string) error      // increment like in comment
-	DecrementLikeCountInComment(commentID string) error // decrement like in comment
-	ExistLikeInComment(userID, commentID string) bool   // check exist like in comment from current user
-	DeleteLikeInComment(commentID, userID string) error // delete like in comment
+	HandleCommentLike(userID, commentID string) error
+	CreateLikeInComment(reaction *CommentLike) error
+	IncrementLikeCountInComment(commentID string) error
+	DecrementLikeCountInComment(commentID string) error
+	IsCommentLikedByUser(userID, commentID string) bool
+	RemoveCommentLike(commentID, userID string) error
 	// dislike in comment
+	HandleCommentDislike(userID, commentID string) error
 	CreateDislikeInComment(reaction *CommentDislike) error
-	IncrementDislikeCountInComment(commentID string) error // increment dislike in comment
-	DecrementDislikeCountInComment(commentID string) error // decrement dislike in comment
-	ExistDisLikeInComment(userID, commentID string) bool   // check exist dislike in comment from current user
-	DeleteDisLikeInComment(commentID, userID string) error
+	IncrementDislikeCountInComment(commentID string) error
+	DecrementDislikeCountInComment(commentID string) error
+	IsCommentDislikedByUser(userID, commentID string) bool
+	RemoveCommentDislike(commentID, userID string) error
 }

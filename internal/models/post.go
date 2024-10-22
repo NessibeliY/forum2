@@ -25,39 +25,40 @@ type Post struct {
 type PostRepository interface {
 	GetAllPosts(postPerPage, offset int) ([]Post, error)
 	AddPost(post Post) error // insert new post
-	DeletePostByPostID(post_id string) error
-	IncrementLikeCount(post_id string) error
-	DecrementLikeCount(post_id string) error
-	IncrementDislikeCount(post_id string) error
-	DecrementDislikeCount(post_id string) error
-	IncrementCommentCount(post_id string) error
-	DecrementCommentCount(post_id string) error
+	DeletePostByPostID(postID string) error
+	IncrementPostLikeCount(postID string) error
+	DecrementPostLikeCount(postID string) error
+	IncrementPostDislikeCount(postID string) error
+	DecrementPostDislikeCount(postID string) error
+	IncrementCommentCount(postID string) error
+	DecrementCommentCount(postID string) error
 	GetAllCategories() (*[]Categories, error)
 	GetPostsByUsername(username string) ([]Post, error)
-	GetPostsLikedByUser(user_id string) ([]Post, error)
-	GetPostsDislikedByUser(user_id string) ([]Post, error)
+	GetPostsLikedByUser(userID string) ([]Post, error)
+	GetPostsDislikedByUser(userID string) ([]Post, error)
 	GetPostsByCategory(tag string) ([]Post, error)
-	GetPostByPostID(post_id string) (*Post, error)
+	GetPostByPostID(postID string) (*Post, error)
 	GetPostsCount() (int, error)
 }
 
 type PostService interface {
 	CreatePost(createPostRequest *CreatePostRequest) error
-	DeletePostByPostID(post_id string) error
-	IncrementLikeCount(post_id string) error
-	DecrementLikeCount(post_id string) error
-	IncrementDislikeCount(post_id string) error
-	DecrementDislikeCount(post_id string) error
-	IncrementCommentCount(post_id string) error
-	DecrementCommentCount(post_id string) error
+	DeletePostByPostID(postID string) error
+	IncrementPostLikeCount(postID string) error
+	DecrementPostLikeCount(postID string) error
+	IncrementPostDislikeCount(postID string) error
+	DecrementPostDislikeCount(postID string) error
+	IncrementCommentCount(postID string) error
+	DecrementCommentCount(postID string) error
 	GetAllPosts(postPerPage, offset int) ([]Post, error)
 	GetAllCategories() (*[]Categories, error)
 	GetPostsByUsername(username string) ([]Post, error)
-	GetPostsLikedByUser(user_id string) ([]Post, error)
-	GetPostsDislikedByUser(user_id string) ([]Post, error)
+	GetPostsLikedByUser(userID string) ([]Post, error)
+	GetPostsDislikedByUser(userID string) ([]Post, error)
 	GetPostsByCategory(tag string) ([]Post, error)
-	GetPostByPostID(post_id string) (*Post, error)
+	GetPostByPostID(postID string) (*Post, error)
 	GetPostsCount() (int, error)
+	PopulatePostData(postID string, data *Login) error
 }
 
 type Posts struct {
@@ -102,5 +103,5 @@ type CreatePostRequest struct {
 type UserPostsResponse struct {
 	Posts    Post
 	Comments []Comment
-	OwnerId  string
+	OwnerID  string
 }

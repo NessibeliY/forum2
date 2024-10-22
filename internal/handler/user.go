@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"forum/internal/models"
@@ -13,8 +14,8 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
+			h.logger.Errorf("parse form: %v", err)
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
-			h.logger.Error("parse form signup", err)
 			return
 		}
 
@@ -36,17 +37,18 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 			}
 
 			h.Render(w, "sign_up.html", data)
+			return
 		}
 
 		err = h.service.UserService.SignUpUser(&data)
 		if err != nil {
-			if err == models.ErrUserExists {
+			if errors.Is(err, models.ErrUserExists) {
 				data.ErrorMessages.Email = "Email or Username already exists"
 				h.Render(w, "sign_up.html", data)
 				return
 			}
+			h.logger.Errorf("signup user: %v", err)
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
-			h.logger.Error("signup user", err)
 			return
 		}
 
@@ -64,8 +66,8 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
+			h.logger.Errorf("parse form: %v", err)
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
-			h.logger.Error("parse form signin", err)
 			return
 		}
 
@@ -74,14 +76,15 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 
 		user, err := h.service.UserService.Login(data.User.Email, data.User.Password)
 		if err != nil {
+			h.logger.Errorf("login: %v", err)
 			h.handleLoginError(err, &data)
 		} else {
 			data.IsAuth = true
 
 			session, err := h.service.SessionService.SetSession(user.ID)
 			if err != nil {
+				h.logger.Errorf("set session: %v", err)
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
-				h.logger.Error("set session", err)
 				return
 			}
 
@@ -102,10 +105,10 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleLoginError(err error, data *models.LoginRequest) {
-	if err == models.ErrUserNotFound {
+	if errors.Is(err, models.ErrUserNotFound) {
 		data.ErrorMessages.Email = "Invalid email"
 		data.ErrorMessages.Password = "Wrong email or password"
-	} else if err == models.ErrWrongPassword {
+	} else if errors.Is(err, models.ErrWrongPassword) {
 		data.ErrorMessages.Password = "Wrong password!Try again:))"
 	}
 }

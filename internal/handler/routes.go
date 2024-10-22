@@ -24,7 +24,7 @@ func (h *Handler) Routes() http.Handler {
 
 	router.HandleFunc("/user/posts/", h.SessionAuthMiddleware(http.HandlerFunc(h.GetUserActivity))) // filter post by user
 	router.HandleFunc("/user/post/delete", h.SessionAuthMiddleware(http.HandlerFunc(h.DeletePost)))
-	router.HandleFunc("/user/comment/delete", h.SessionAuthMiddleware(http.HandlerFunc(h.DeleteComment)))
+	router.HandleFunc("/user/comment/delete", h.SessionAuthMiddleware(http.HandlerFunc(h.RemoveCommentByCommentID)))
 
 	return router
 }

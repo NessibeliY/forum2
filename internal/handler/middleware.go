@@ -9,17 +9,15 @@ import (
 
 func (h *Handler) SessionAuthMiddleware(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// get cookie
-		c, err := r.Cookie(string(models.SessionKey))
+		cookie, err := r.Cookie(string(models.SessionKey))
 		if err != nil {
-			h.logger.Info("check session in middleware", err)
 			next.ServeHTTP(w, r)
 			return
 		}
 
-		session, err := h.service.SessionService.GetSessionByToken(c.Value)
+		session, err := h.service.SessionService.GetSessionByToken(cookie.Value)
 		if err != nil {
-			h.logger.Info("Session not found in middleware", err)
+			h.logger.Errorf("get session by token: %v", err)
 			next.ServeHTTP(w, r)
 			return
 		}

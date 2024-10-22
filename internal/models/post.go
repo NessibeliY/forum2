@@ -7,19 +7,19 @@ import (
 )
 
 type Post struct {
-	PostID       string
-	UserID       string
-	Author       string
-	Title        string
-	Description  string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	LikeCount    int
-	DislikeCount int
-	Comments     int
-	Tags         []string
-	IsLike       bool // в базе не хранится
-	IsDisLike    bool // в базе не хранится
+	PostID        string
+	UserID        string
+	Author        string
+	Title         string
+	Description   string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	LikesCount    int
+	DislikesCount int
+	Comments      int
+	Tags          []string
+	IsLike        bool // в базе не хранится
+	IsDisLike     bool // в базе не хранится
 }
 
 type PostRepository interface {

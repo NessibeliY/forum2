@@ -39,15 +39,28 @@ func (l *Logger) logWithCallerInfo(prefix string, v ...interface{}) {
 	l.Logger.Println(v...)
 }
 
-func (l *Logger) Fatal(format string, v ...interface{}) {
+func (l *Logger) Fatalf(format string, v ...interface{}) {
 	l.logWithCallerInfo("FATAL:", fmt.Sprintf(format, v...))
 	os.Exit(1)
 }
 
-func (l *Logger) Info(format string, v ...interface{}) {
+func (l *Logger) Fatal(v ...interface{}) {
+	l.logWithCallerInfo("FATAL:", v...)
+	os.Exit(1)
+}
+
+func (l *Logger) Infof(format string, v ...interface{}) {
 	l.logWithCallerInfo("INFO:", fmt.Sprintf(format, v...))
 }
 
-func (l *Logger) Error(format string, v ...interface{}) {
+func (l *Logger) Info(v ...interface{}) {
+	l.logWithCallerInfo("INFO:", v...)
+}
+
+func (l *Logger) Errorf(format string, v ...interface{}) {
 	l.logWithCallerInfo("ERROR:", fmt.Sprintf(format, v...))
+}
+
+func (l *Logger) Error(v ...interface{}) {
+	l.logWithCallerInfo("ERROR:", v...)
 }

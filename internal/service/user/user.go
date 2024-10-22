@@ -23,7 +23,7 @@ func (u *UserService) SignUpUser(signupRequest *models.SignupRequest) error {
 	// if err != nil {
 	// 	return err
 	// }
-	if existingUser != nil && (existingUser.Email == signupRequest.Email || existingUser.UserName == signupRequest.UserName) {
+	if existingUser != nil && (existingUser.Email == signupRequest.Email || existingUser.Username == signupRequest.Username) {
 		return models.ErrUserExists
 	}
 
@@ -39,7 +39,7 @@ func (u *UserService) SignUpUser(signupRequest *models.SignupRequest) error {
 
 	userModel := models.User{
 		ID:       id.String(),
-		UserName: signupRequest.UserName,
+		Username: signupRequest.Username,
 		Email:    signupRequest.Email,
 		Password: hashPass,
 	}

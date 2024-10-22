@@ -17,17 +17,17 @@ type Dislike struct {
 }
 
 type Comment struct {
-	CommentID    string
-	PostID       string
-	Author       string
-	CommentText  string
-	LikeCount    int
-	DislikeCount int
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	IsLiked      bool
-	DisLiked     bool
-	OwnerId      string
+	CommentID     string
+	PostID        string
+	Author        string
+	CommentText   string
+	LikesCount    int
+	DislikesCount int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	IsLiked       bool
+	DisLiked      bool
+	OwnerId       string
 }
 
 type CommentLike struct {
@@ -46,59 +46,59 @@ type CommentDislike struct {
 
 type ReactionRepository interface {
 	// like in post
-	InsertLikePost(like *Like) error              // insert new like
-	LikeExistInPost(post_id, user_id string) bool // check like current post from user
-	DeleteLike(post_id, user_id string) error     // delete like
+	InsertLikePost(like *Like) error
+	LikeExistInPost(postID, userID string) bool
+	DeleteLike(postID, userID string) error
 	// dislike in post
-	InsertDisLikePost(disLike *Dislike) error        // insert new dislike
-	DisLikeExistInPost(post_id, user_id string) bool // check dislike current post from user
-	DeleteDisLike(post_id, user_id string) error     // delete dislike
+	InsertDisLikePost(disLike *Dislike) error      // insert new dislike
+	DislikeExistInPost(postID, userID string) bool // check dislike current post from user
+	DeleteDislike(postID, userID string) error     // delete dislike
 	// comments in post
 	InsertCommentInPost(comment *Comment) error   // insert new comment
-	GetCommentsByID(id string) ([]Comment, error) // get comment list by post_id
-	DeleteComment(comment_id string) error        // delete comment
-	DeleteCommentByPostID(post_id string) error   // delete comment by POST ID
+	GetCommentsByID(id string) ([]Comment, error) // get comment list by postID
+	DeleteComment(commentID string) error         // delete comment
+	DeleteCommentByPostID(postID string) error    // delete comment by POST ID
 	// like in comment
-	InsertLikeInComment(reaction *CommentLike) error      // insert new like in comment
-	IncrementLikeInComment(comment_id string) error       // increment like in comment
-	DecrementLikeInComment(comment_id string) error       // decrement like in comment
-	ExistLikeInComment(user_id, comment_id string) bool   // check exist like in comment from current user
-	DeleteLikeInComment(comment_id, user_id string) error // delete dislike in comment
-	DeleteLikeInCommentByUserID(user_id string) error     // delete Like In Comment By Post ID
+	InsertLikeInComment(reaction *CommentLike) error    // insert new like in comment
+	IncrementLikeInComment(commentID string) error      // increment like in comment
+	DecrementLikeCountInComment(commentID string) error // decrement like in comment
+	ExistLikeInComment(userID, commentID string) bool   // check exist like in comment from current user
+	DeleteLikeInComment(commentID, userID string) error // delete dislike in comment
+	DeleteLikeInCommentByUserID(userID string) error    // delete Like In Comment By Post ID
 	// dislike in comment
-	InsertDisLikeInComment(reaction *CommentDislike) error // insert dislike in comment
-	IncrementDisLikeInComment(comment_id string) error     // increment dislike in comment
-	DecrementDisLikeInComment(comment_id string) error     // decrement dislike in comment
-	ExistDisLikeInComment(user_id, comment_id string) bool // check exist dislike in comment from current user
-	DeleteDisLikeInComment(comment_id, user_id string) error
-	DeleteDisLikeInCommentByUserID(user_id string) error
+	InsertDislikeInComment(reaction *CommentDislike) error // insert dislike in comment
+	IncrementDislikeCountInComment(commentID string) error // increment dislike in comment
+	DecrementDislikeCountInComment(commentID string) error // decrement dislike in comment
+	ExistDisLikeInComment(userID, commentID string) bool   // check exist dislike in comment from current user
+	DeleteDisLikeInComment(commentID, userID string) error
+	DeleteDisLikeInCommentByUserID(userID string) error
 }
 
 type ReactionService interface {
 	// delete reaction
-	DeleteReaction(post_id, user_id string) error
+	DeleteReaction(postID, userID string) error
 	// like in post
-	CreateLikeInPost(like *Like) error              // create like in post
-	LikeExistInPost(post_id, user_id string) bool   // check like exist in post
-	DeleteLikeInPost(post_id, user_id string) error // delete like in post
+	CreateLikeInPost(like *Like) error            // create like in post
+	LikeExistInPost(postID, userID string) bool   // check like exist in post
+	DeleteLikeInPost(postID, userID string) error // delete like in post
 	// dislike in post
-	CreateDislikeInPost(dislike *Dislike) error      // create dislike in post
-	DisLikeExistInPost(post_id, user_id string) bool // check dislike exist in post
-	DeleteDisLike(post_id, user_id string) error     // delete dislike in post
+	CreateDislikeInPost(dislike *Dislike) error    // create dislike in post
+	DislikeExistInPost(postID, userID string) bool // check dislike exist in post
+	DeleteDislike(postID, userID string) error     // delete dislike in post
 	// comment
-	CreateCommentInPost(comment *Comment) error        // create comment in post
-	GetCommentsByID(post_id string) ([]Comment, error) // get comment list by POST ID
-	DeleteComment(comment_id string) error
+	CreateCommentInPost(comment *Comment) error       // create comment in post
+	GetCommentsByID(postID string) ([]Comment, error) // get comment list by POST ID
+	DeleteComment(commentID string) error
 	// like in comment
-	CreateLikeInComment(reaction *CommentLike) error      // create  like in comment
-	IncrementLikeInComment(comment_id string) error       // increment like in comment
-	DecrementLikeInComment(comment_id string) error       // decrement like in comment
-	ExistLikeInComment(user_id, comment_id string) bool   // check exist like in comment from current user
-	DeleteLikeInComment(comment_id, user_id string) error // delete like in comment
+	CreateLikeInComment(reaction *CommentLike) error    // create  like in comment
+	IncrementLikeInComment(commentID string) error      // increment like in comment
+	DecrementLikeCountInComment(commentID string) error // decrement like in comment
+	ExistLikeInComment(userID, commentID string) bool   // check exist like in comment from current user
+	DeleteLikeInComment(commentID, userID string) error // delete like in comment
 	// dislike in comment
-	CreateDisLikeInComment(reaction *CommentDislike) error
-	IncrementDisLikeInComment(comment_id string) error     // increment dislike in comment
-	DecrementDisLikeInComment(comment_id string) error     // decrement dislike in comment
-	ExistDisLikeInComment(user_id, comment_id string) bool // check exist dislike in comment from current user
-	DeleteDisLikeInComment(comment_id, user_id string) error
+	CreateDislikeInComment(reaction *CommentDislike) error
+	IncrementDislikeCountInComment(commentID string) error // increment dislike in comment
+	DecrementDislikeCountInComment(commentID string) error // decrement dislike in comment
+	ExistDisLikeInComment(userID, commentID string) bool   // check exist dislike in comment from current user
+	DeleteDisLikeInComment(commentID, userID string) error
 }

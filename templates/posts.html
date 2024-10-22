@@ -63,11 +63,11 @@
                     <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                     {{if .Posts.IsLike}}
                     <button class="btn_like btn_like_active" type="submit">
-                        <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Posts.LikeCount }})
+                        <i class="fa-regular fa-thumbs-up mx-1"></i> Liked({{ .Posts.LikesCount }})
                     </button>
                     {{else}}
                     <button class="btn_like " type="submit">
-                        <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Posts.LikeCount }})
+                        <i class="fa-regular fa-thumbs-up mx-1"></i>Liked({{ .Posts.LikesCount }})
                     </button>
                     {{end}}
                 </form>
@@ -75,11 +75,11 @@
                     <input type="hidden" name="PostID" value="{{.Posts.PostID}}">
                     {{if .Posts.IsDisLike}}
                     <button class="btn_like btn_like_active" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikeCount}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikesCount}})
                     </button>
                     {{else}}
                     <button class="btn_like" type="submit">
-                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikeCount}})
+                        <i class="fa-regular fa-thumbs-down mx-1"></i>DisLiked({{.Posts.DislikesCount}})
                     </button>
                     {{end}}
                 </form>

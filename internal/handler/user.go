@@ -18,7 +18,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		data.UserName = r.Form.Get("username")
+		data.Username = r.Form.Get("username")
 		data.Email = r.Form.Get("email")
 		data.Password = r.Form.Get("password")
 
@@ -26,7 +26,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 		if models.ValidateSignupRequest(v, &data); !v.Valid() {
 			if v.ErrorsMap["username"] != "" {
-				data.ErrorMessages.UserName = v.ErrorsMap["username"]
+				data.ErrorMessages.Username = v.ErrorsMap["username"]
 			}
 			if v.ErrorsMap["email"] != "" {
 				data.ErrorMessages.Email = v.ErrorsMap["email"]

@@ -28,7 +28,3 @@ func (h *Handler) SessionAuthMiddleware(next http.Handler) http.HandlerFunc {
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
-
-func (h *Handler) NoOpMiddleware(next http.Handler) http.Handler {
-	return next
-}

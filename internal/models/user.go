@@ -38,7 +38,7 @@ var (
 type User struct {
 	ID        string `json:"id"`
 	CreatedAt string `json:"created_at"`
-	UserName  string `json:"username"`
+	Username  string `json:"username"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 }
@@ -56,7 +56,7 @@ type UserService interface {
 }
 
 type SignupRequest struct {
-	UserName      string
+	Username      string
 	Email         string
 	Password      string
 	ErrorMessages ErrorMessage
@@ -76,7 +76,7 @@ type AuthData struct {
 
 type ErrorMessage struct {
 	Email       string
-	UserName    string
+	Username    string
 	Password    string
 	Title       string
 	Description string
@@ -95,8 +95,8 @@ func ValidatePassword(v *validator.Validator, password string) {
 }
 
 func ValidateSignupRequest(v *validator.Validator, u *SignupRequest) {
-	v.Check(u.UserName != "", "username", "must be provided")
-	v.Check(len(u.UserName) > 3, "username", "username must be at least 3 characters long")
+	v.Check(u.Username != "", "username", "must be provided")
+	v.Check(len(u.Username) > 3, "username", "username must be at least 3 characters long")
 
 	ValidateEmail(v, u.Email)
 	ValidatePassword(v, u.Password)

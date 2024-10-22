@@ -26,7 +26,7 @@ func (h *Handler) ResponseData(posts []models.Post, username, UserID string) []m
 		// check exist like in post from current user
 		existLike := h.service.ReactionService.LikeExistInPost(post.PostID, UserID)
 		// check exist dislike in post from current user
-		existDisLike := h.service.ReactionService.DisLikeExistInPost(post.PostID, UserID)
+		existDisLike := h.service.ReactionService.DislikeExistInPost(post.PostID, UserID)
 
 		post.IsLike = existLike
 		post.IsDisLike = existDisLike
@@ -59,7 +59,7 @@ func (h *Handler) ResponseData(posts []models.Post, username, UserID string) []m
 func (h *Handler) GetComment(post_id, user_name, user_id string) []models.Comment {
 	comments, err := h.service.ReactionService.GetCommentsByID(post_id)
 	if err != nil {
-		h.logger.Error("GET COMMENT", "ADD COMMENT HANDLER")
+		h.logger.Error("get comments by id: %w", err)
 		return []models.Comment{}
 	}
 
@@ -79,7 +79,7 @@ func (h *Handler) GetComment(post_id, user_name, user_id string) []models.Commen
 
 func (h *Handler) CheckPostReaction(post *models.Post, UserID string) {
 	existLike := h.service.ReactionService.LikeExistInPost(post.PostID, UserID)
-	existDisLike := h.service.ReactionService.DisLikeExistInPost(post.PostID, UserID)
+	existDisLike := h.service.ReactionService.DislikeExistInPost(post.PostID, UserID)
 
 	if existLike {
 		post.IsLike = existLike

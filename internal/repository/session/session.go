@@ -17,7 +17,7 @@ func NewSessionRepo(db *sql.DB) *SessionRepo {
 }
 
 func (s *SessionRepo) AddSession(session models.Session) error {
-	stmt := `INSERT INTO session(session_id,user_id,token,expire_time)VALUES(?,?,?,?)`
+	stmt := `INSERT INTO sessions(session_id,user_id,token,expire_time)VALUES(?,?,?,?)`
 	if _, err := s.db.Exec(stmt, session.SessionId, session.UserID, session.Token, session.ExpireTime); err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func (s *SessionRepo) AddSession(session models.Session) error {
 }
 
 func (s *SessionRepo) DeleteSessionByUserID(UserID string) error {
-	stmt := `DELETE FROM session WHERE user_id = ?`
+	stmt := `DELETE FROM sessions WHERE user_id = ?`
 	if _, err := s.db.Exec(stmt, UserID); err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (s *SessionRepo) DeleteSessionByUserID(UserID string) error {
 
 func (s *SessionRepo) GetSessionById(UserID string) (*models.Session, error) {
 	var session models.Session
-	stmt := `SELECT * FROM session WHERE user_id = ?`
+	stmt := `SELECT * FROM sessions WHERE user_id = ?`
 	row := s.db.QueryRow(stmt, UserID)
 
 	err := row.Scan(&session.SessionId, &session.UserID, &session.Token, &session.ExpireTime)
@@ -49,7 +49,7 @@ func (s *SessionRepo) GetSessionById(UserID string) (*models.Session, error) {
 
 func (u *SessionRepo) GetSessionByToken(token string) (*models.Session, error) {
 	var session models.Session
-	stmt := `SELECT * FROM session WHERE token = ?`
+	stmt := `SELECT * FROM sessions WHERE token = ?`
 	row := u.db.QueryRow(stmt, token)
 
 	err := row.Scan(&session.SessionId, &session.UserID, &session.Token, &session.ExpireTime)

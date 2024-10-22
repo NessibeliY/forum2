@@ -28,7 +28,7 @@ func (s *Server) RunServer(port string, handler http.Handler) error {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	s.logger.Info("starting server at http://localhost%s\n", s.httpServer.Addr)
+	s.logger.Infof("starting server at http://localhost%s\n", s.httpServer.Addr)
 	if err := s.httpServer.ListenAndServe(); err != nil {
 		return fmt.Errorf("http server listen and serve: %w", err)
 	}

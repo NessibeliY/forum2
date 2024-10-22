@@ -7,6 +7,8 @@ import (
 	"forum/internal/models"
 )
 
+const AllPostsNavigation = "all"
+
 func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		h.logger.Info("Page not found", "home page")
@@ -64,7 +66,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 			h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 			return
 		}
-		data.UserName = user.UserName
+		data.Username = user.Username
 		data.Id = s.UserID
 	}
 
@@ -77,9 +79,9 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	data.Categories = *categories
 
 	// get post and comment
-	data.Posts = h.ResponseData(posts, data.UserName, data.Id)
+	data.Posts = h.ResponseData(posts, data.Username, data.Id)
 	// defalut value current page
-	data.CurrentPage = "all"
+	data.CurrentPage = AllPostsNavigation
 	data.ShowCreatePostForm = false
 	if r.URL.Path == "/create-post" {
 		data.ShowCreatePostForm = true
@@ -114,14 +116,14 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 		data.IsAuth = true
 
 		user, _ := h.service.UserService.GetUserByUserID(s.UserID)
-		data.UserName = user.UserName
+		data.Username = user.Username
 		data.Id = s.UserID
 
 		switch filter {
-		case "all":
+		case AllPostsNavigation:
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		case "my":
-			posts, err = h.service.PostService.GetPostsByUsername(user.UserName)
+			posts, err = h.service.PostService.GetPostsByUsername(user.Username)
 			data.CurrentPage = "my"
 			if err != nil {
 				h.logger.Info("Get post by user name - 'my'", "GetUserActivity Handler", err)
@@ -153,7 +155,7 @@ func (h *Handler) GetUserActivity(w http.ResponseWriter, r *http.Request) {
 	data.Categories = *categories
 
 	// get post and comment
-	data.Posts = h.ResponseData(posts, data.UserName, data.Id)
+	data.Posts = h.ResponseData(posts, data.Username, data.Id)
 
 	h.Render(w, "index.html", data)
 }

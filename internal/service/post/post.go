@@ -34,15 +34,15 @@ func (p *PostService) CreatePost(createPostRequest *models.CreatePostRequest) er
 	}
 
 	newPost := &models.Post{
-		PostID:       PostID.String(),
-		UserID:       createPostRequest.UserID,
-		Author:       createPostRequest.Author,
-		Title:        createPostRequest.Title,
-		Description:  createPostRequest.Description,
-		LikeCount:    0,
-		DislikeCount: 0,
-		Comments:     0,
-		Tags:         createPostRequest.Tags,
+		PostID:        PostID.String(),
+		UserID:        createPostRequest.UserID,
+		Author:        createPostRequest.Author,
+		Title:         createPostRequest.Title,
+		Description:   createPostRequest.Description,
+		LikesCount:    0,
+		DislikesCount: 0,
+		Comments:      0,
+		Tags:          createPostRequest.Tags,
 	}
 
 	err = p.PostRepo.AddPost(*newPost)
@@ -141,7 +141,7 @@ func (p *PostService) GetAllCategories() (*[]models.Categories, error) {
 func (p *PostService) GetPostsByUsername(username string) ([]models.Post, error) {
 	post, err := p.PostRepo.GetPostsByUsername(username)
 	if err != nil {
-		return nil, fmt.Errorf("%v", err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return post, nil
 }
@@ -149,7 +149,7 @@ func (p *PostService) GetPostsByUsername(username string) ([]models.Post, error)
 func (p *PostService) GetPostsLikedByUser(user_id string) ([]models.Post, error) {
 	posts, err := p.PostRepo.GetPostsLikedByUser(user_id)
 	if err != nil {
-		return nil, fmt.Errorf("%v", err)
+		return nil, fmt.Errorf("%w", err)
 	}
 	return posts, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"forum/internal/models"
@@ -226,8 +227,12 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 			postID := r.Form.Get("post-id")
 			commentText := r.Form.Get("comment_text")
 
-			if commentText == "" {
-				http.Error(w, "Comment text cannot be empty", http.StatusBadRequest)
+			re := regexp.MustCompile(`^\s*$`)
+			currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
+
+			if re.MatchString(commentText) {
+				h.logger.Info("empty comment")
+				http.Redirect(w, r, currentPath, http.StatusSeeOther)
 				return
 			}
 
@@ -250,8 +255,6 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 				h.ErrorHandler(w, http.StatusInternalServerError, "Internal server error")
 				return
 			}
-
-			currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
 			http.Redirect(w, r, currentPath, http.StatusSeeOther)
 		}

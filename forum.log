@@ -4,3 +4,84 @@ INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 
 
 INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/23 02:36:46 logger.go:39: shutting down server...
 INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/23 02:36:47 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 17:42:19 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 17:42:19 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 17:42:19 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 17:58:46 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 17:58:46 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:10:09 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:10:09 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:10:09 logger.go:39: starting server at http://localhost:8080
+
+ERROR: /home/student/forum/internal/handler/middleware.go:20 2024/10/27 18:10:16 logger.go:39: get session by token: session not found
+ERROR: /home/student/forum/internal/handler/middleware.go:20 2024/10/27 18:10:29 logger.go:39: get session by token: session not found
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:15:19 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:15:19 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:15:20 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:15:20 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:15:20 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:18:26 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:18:26 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:18:28 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:18:28 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:18:28 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:20:59 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:20:59 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:21:02 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:21:02 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:21:02 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:26:24 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:26:24 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:26:26 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:26:26 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:26:26 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:51:23 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:51:23 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:51:25 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:51:25 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:51:25 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:53:10 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:53:10 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:53:11 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:53:11 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:53:11 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/internal/handler/post.go:233 2024/10/27 18:53:19 logger.go:39: empty comment
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:54:19 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:54:19 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:54:20 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:54:20 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:54:20 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:54:27 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:54:40 logger.go:39: empty comment
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:55:30 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:55:30 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 18:57:52 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 18:57:52 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 18:57:52 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:57:56 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:57:59 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:58:01 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:58:06 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:58:10 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:58:30 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 18:58:34 logger.go:39: empty comment
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 18:59:59 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 18:59:59 logger.go:39: server gracefully stopped
+INFO: /home/student/forum/internal/template/templates.go:41 2024/10/27 19:00:01 logger.go:39: html templates cached
+INFO: /home/student/forum/internal/store/sqlite_store.go:38 2024/10/27 19:00:01 logger.go:39: connected to db
+INFO: /home/student/forum/internal/server/server.go:31 2024/10/27 19:00:01 logger.go:39: starting server at http://localhost:8080
+
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 19:01:01 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 19:01:07 logger.go:39: empty comment
+INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 19:01:09 logger.go:39: empty comment
+INFO: /home/student/forum/cmd/main.go:65 2024/10/27 19:01:32 logger.go:39: shutting down server...
+INFO: /home/student/forum/cmd/main.go:73 2024/10/27 19:01:32 logger.go:39: server gracefully stopped

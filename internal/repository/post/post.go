@@ -241,21 +241,21 @@ func (p *PostRepo) GetPostsByCategory(tag string) ([]models.Post, error) {
 	return posts, nil
 }
 
-func (p *PostRepo) GetPostByPostID(postID string) (*models.Post, error) {
+func (p *PostRepo) GetPostByPostID(postID string) (models.Post, error) {
 	var post models.Post
 	stmt := `SELECT * FROM posts WHERE post_id = ?`
 	row := p.db.QueryRow(stmt, postID)
 	var tags string
 	err := row.Scan(&post.PostID, &post.UserID, &post.Author, &post.Title, &post.Description, &post.CreatedAt, &post.UpdatedAt, &post.LikesCount, &post.DislikesCount, &post.Comments, &tags)
 	if err == sql.ErrNoRows {
-		return &models.Post{}, nil
+		return models.Post{}, nil
 	} else if err != nil {
-		return nil, fmt.Errorf("row scan: %w", err)
+		return models.Post{}, fmt.Errorf("row scan: %w", err)
 	}
 
 	post.Tags = strings.Split(tags, ",")
 
-	return &post, nil
+	return post, nil
 }
 
 func (p *PostRepo) GetPostsCount() (int, error) {

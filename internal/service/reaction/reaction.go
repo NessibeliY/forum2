@@ -91,6 +91,14 @@ func (r *ReactionService) HandlePostLike(userID, postID string) error {
 	return nil
 }
 
+func (r *ReactionService) AddPostLike(newLike models.Like) error {
+	return r.ReactionRepo.AddPostLike(newLike)
+}
+
+func (r *ReactionService) RemovePostLike(postID, userID string) error {
+	return r.ReactionRepo.RemovePostLike(postID, userID)
+}
+
 func (r *ReactionService) HandlePostDislike(userID, postID string) error {
 	isDisliked := r.ReactionRepo.IsPostDislikedByUser(postID, userID)
 	if isDisliked {
@@ -102,7 +110,7 @@ func (r *ReactionService) HandlePostDislike(userID, postID string) error {
 		return models.ErrUUIDCreate
 	}
 
-	newDislike := &models.Dislike{
+	newDislike := models.Dislike{
 		DislikeID: id.String(),
 		PostID:    postID,
 		UserID:    userID,
@@ -121,8 +129,12 @@ func (r *ReactionService) HandlePostDislike(userID, postID string) error {
 	return nil
 }
 
+func (r *ReactionService) AddPostDislike(newDislike models.Dislike) error {
+	return r.ReactionRepo.AddPostDislike(newDislike)
+}
+
 func (r *ReactionService) DeleteReaction(postID, userID string) error {
-	err := r.DeleteLikeInPost(postID, userID)
+	err := r.RemovePostLike(postID, userID)
 	if err != nil {
 		return fmt.Errorf("delete like in post: %w", err)
 	}
@@ -156,10 +168,6 @@ func (r *ReactionService) IsPostLikedByUser(postID, userID string) bool {
 
 func (r *ReactionService) IsPostDislikedByUser(postID, userID string) bool {
 	return r.ReactionRepo.IsPostDislikedByUser(postID, userID) //nolint:wrapcheck
-}
-
-func (r *ReactionService) DeleteLikeInPost(postID, userID string) error {
-	return r.ReactionRepo.RemovePostLike(postID, userID) //nolint:wrapcheck
 }
 
 func (r *ReactionService) RemovePostDislike(postID, userID string) error {

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"regexp"
 	"time"
 
 	"forum/internal/validator"
@@ -37,7 +38,7 @@ type PostRepository interface {
 	GetPostsLikedByUser(userID string) ([]Post, error)
 	GetPostsDislikedByUser(userID string) ([]Post, error)
 	GetPostsByCategory(tag string) ([]Post, error)
-	GetPostByPostID(postID string) (*Post, error)
+	GetPostByPostID(postID string) (Post, error)
 	GetPostsCount() (int, error)
 }
 
@@ -56,7 +57,7 @@ type PostService interface {
 	GetPostsLikedByUser(userID string) ([]Post, error)
 	GetPostsDislikedByUser(userID string) ([]Post, error)
 	GetPostsByCategory(tag string) ([]Post, error)
-	GetPostByPostID(postID string) (*Post, error)
+	GetPostByPostID(postID string) (Post, error)
 	GetPostsCount() (int, error)
 	PopulatePostData(postID string, data *Login) error
 }
@@ -75,10 +76,18 @@ type ErrorComment struct {
 }
 
 func ValidateTitle(v *validator.Validator, title string) {
+	re := regexp.MustCompile(`^\s*$`)
+	if re.MatchString(title) {
+		title = ""
+	}
 	v.Check(title != "", "title", "Title is required")
 }
 
 func ValidateDescription(v *validator.Validator, description string) {
+	re := regexp.MustCompile(`^\s*$`)
+	if re.MatchString(description) {
+		description = ""
+	}
 	v.Check(description != "", "description", "Description is required")
 }
 

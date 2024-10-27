@@ -44,7 +44,7 @@ func (r *ReactionRepo) RemovePostLike(postID, userID string) error {
 	return nil
 }
 
-func (r *ReactionRepo) AddPostDislike(dislike *models.Dislike) error {
+func (r *ReactionRepo) AddPostDislike(dislike models.Dislike) error {
 	stmt := `INSERT INTO post_dislikes(dislike_id, post_id, user_id, created_at)VALUES(?,?,?,datetime('now','localtime'))`
 	if _, err := r.db.Exec(stmt, dislike.DislikeID, dislike.PostID, dislike.UserID); err != nil {
 		return models.ErrNotCreated

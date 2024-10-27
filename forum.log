@@ -85,3 +85,148 @@ INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 19:01:07 logge
 INFO: /home/student/forum/internal/handler/post.go:234 2024/10/27 19:01:09 logger.go:39: empty comment
 INFO: /home/student/forum/cmd/main.go:65 2024/10/27 19:01:32 logger.go:39: shutting down server...
 INFO: /home/student/forum/cmd/main.go:73 2024/10/27 19:01:32 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/27 23:23:22 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/27 23:23:22 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/27 23:23:22 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/27 23:40:17 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/27 23:40:17 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/27 23:40:51 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/27 23:40:51 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/27 23:40:51 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/27 23:45:20 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/27 23:45:20 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/27 23:45:21 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/27 23:45:21 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/27 23:45:21 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 00:17:08 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 00:17:08 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 00:31:34 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 00:31:34 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 00:31:34 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 00:58:33 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 00:58:33 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 00:58:35 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 00:58:35 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 00:58:35 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:25:05 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:25:05 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:25:08 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:25:08 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:25:08 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:27:39 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:27:39 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:27:40 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:27:40 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:27:40 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:28:23 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:28:23 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:28:25 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:28:25 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:28:25 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:37:12 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:37:12 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:37:13 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:37:13 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:37:13 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:37:50 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:37:50 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:37:51 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:37:51 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:37:51 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:38:12 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:38:12 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:38:18 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:38:18 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:38:18 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:39:05 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:39:05 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:39:10 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:39:10 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:39:10 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:39:53 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:39:53 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:39:57 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:39:57 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:39:57 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/handler/post.go:288 2024/10/28 01:40:06 logger.go:39: empty comment
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:56:26 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:56:26 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:56:29 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:56:29 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:56:29 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:59:15 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:59:15 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 01:59:20 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 01:59:20 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 01:59:20 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 01:59:56 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 01:59:56 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:00:01 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:00:01 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:00:01 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:03:06 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:03:06 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:03:11 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:03:11 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:03:11 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:04:01 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:04:01 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:04:02 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:04:02 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:04:02 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:06:01 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:06:01 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:06:02 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:06:02 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:06:02 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:07:37 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:07:37 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:07:37 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:07:37 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:07:37 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:08:01 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:08:01 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:08:05 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:08:05 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:08:05 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:09:11 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:09:11 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:09:12 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:09:12 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:09:12 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:32:25 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:32:25 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:32:51 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:32:51 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:32:51 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:36:34 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:36:34 logger.go:39: server gracefully stopped
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/template/templates.go:41 2024/10/28 02:36:38 logger.go:39: html templates cached
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/store/sqlite_store.go:38 2024/10/28 02:36:38 logger.go:39: connected to db
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/internal/server/server.go:31 2024/10/28 02:36:38 logger.go:39: starting server at http://localhost:8080
+
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:65 2024/10/28 02:44:40 logger.go:39: shutting down server...
+INFO: /Users/nessibeliyeltay/Documents/ALEM/forum2/cmd/main.go:73 2024/10/28 02:44:40 logger.go:39: server gracefully stopped

@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gofrs/uuid"
+
 	"forum/internal/models"
 	"forum/internal/validator"
 )
@@ -40,8 +42,8 @@ func (h *Handler) CreatePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		title := r.Form.Get("title")
-		description := r.Form.Get("description")
+		title := strings.TrimSpace(r.Form.Get("title"))
+		description := strings.TrimSpace(r.Form.Get("description"))
 		tags := r.Form["tags"]
 
 		v := validator.NewValidator()
@@ -102,9 +104,37 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 
 	PostID := r.FormValue("PostID")
 
-	err := h.service.ReactionService.HandlePostLike(session.UserID, PostID)
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
+
+	isLiked := h.service.ReactionService.IsPostLikedByUser(PostID, session.UserID)
+	if isLiked {
+		http.Redirect(w, r, currentPath, http.StatusSeeOther)
+		return
+	}
+
+	id, err := uuid.NewV4()
 	if err != nil {
-		h.logger.Errorf("handle post like: %v", err)
+		h.logger.Errorf("generate uuid: %v", err)
+		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+
+	newLike := models.Like{
+		LikeID: id.String(),
+		PostID: PostID,
+		UserID: session.UserID,
+	}
+
+	err = h.service.ReactionService.AddPostLike(newLike)
+	if err != nil {
+		h.logger.Errorf("add like: %v", err)
+		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+
+	err = h.service.ReactionService.RemovePostDislike(PostID, session.UserID)
+	if err != nil {
+		h.logger.Errorf("remove like: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
@@ -115,8 +145,6 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-
-	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
 	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
@@ -135,9 +163,37 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 
 	PostID := r.FormValue("PostID")
 
-	err := h.service.ReactionService.HandlePostDislike(session.UserID, PostID)
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
+
+	isDisliked := h.service.ReactionService.IsPostDislikedByUser(PostID, session.UserID)
+	if isDisliked {
+		http.Redirect(w, r, currentPath, http.StatusSeeOther)
+		return
+	}
+
+	id, err := uuid.NewV4()
 	if err != nil {
-		h.logger.Errorf("handle post dislike: %v", err)
+		h.logger.Errorf("generate uuid: %v", err)
+		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+
+	newDislike := models.Dislike{
+		DislikeID: id.String(),
+		PostID:    PostID,
+		UserID:    session.UserID,
+	}
+
+	err = h.service.ReactionService.AddPostDislike(newDislike)
+	if err != nil {
+		h.logger.Errorf("add dislike: %v", err)
+		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
+		return
+	}
+
+	err = h.service.ReactionService.RemovePostLike(PostID, session.UserID)
+	if err != nil {
+		h.logger.Errorf("remove like: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
@@ -148,8 +204,6 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
-
-	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
 	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
@@ -166,8 +220,8 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 		}
 
 		postID := query.Get("post-id")
-		if postID == "" {
-			h.ErrorHandler(w, http.StatusBadRequest, "Missing post ID")
+		if !h.postExists(postID) {
+			h.ErrorHandler(w, http.StatusBadRequest, "post doesn't exist")
 			return
 		}
 		data := models.Login{IsAuth: false} // default user not authenticated
@@ -206,6 +260,15 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handler) postExists(postID string) bool {
+	post, err := h.service.PostService.GetPostByPostID(postID)
+	if err != nil {
+		h.logger.Errorf("get post by post_id: %v", err)
+		return false
+	}
+	return post.PostID != ""
+}
+
 func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 	session, ok := r.Context().Value(models.SessionKey).(models.Session)
 
@@ -225,7 +288,7 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			postID := r.Form.Get("post-id")
-			commentText := r.Form.Get("comment_text")
+			commentText := strings.TrimSpace(r.Form.Get("comment_text"))
 
 			re := regexp.MustCompile(`^\s*$`)
 			currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))

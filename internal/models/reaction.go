@@ -50,7 +50,7 @@ type ReactionRepository interface {
 	IsPostLikedByUser(postID, userID string) bool
 	RemovePostLike(postID, userID string) error
 	// dislike in post
-	AddPostDislike(disLike *Dislike) error
+	AddPostDislike(disLike Dislike) error
 	IsPostDislikedByUser(postID, userID string) bool
 	RemovePostDislike(postID, userID string) error
 	// comments in post
@@ -78,11 +78,11 @@ type ReactionService interface {
 	// delete reaction
 	DeleteReaction(postID, userID string) error
 	// like in post
-	HandlePostLike(userID, postID string) error
+	AddPostLike(newLike Like) error
+	RemovePostLike(postID, userID string) error
 	IsPostLikedByUser(postID, userID string) bool
-	DeleteLikeInPost(postID, userID string) error
 	// dislike in post
-	HandlePostDislike(userID, postID string) error
+	AddPostDislike(newDislike Dislike) error
 	IsPostDislikedByUser(postID, userID string) bool
 	RemovePostDislike(postID, userID string) error
 	// comment

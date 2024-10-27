@@ -76,8 +76,7 @@
                             name="comment_text"
                             class="border border-gray-500 rounded-md w-full focus:outline-none focus:border-blue-600 py-3 px-3"
                             rows="2"
-                            cols="20">
-                            </textarea>
+                            cols="20"></textarea>
                             <button type="submit" style="margin-top: 2%;" class="btn_create btn_auth">
                             Create comment
                             </button>
@@ -205,7 +204,13 @@
         document.getElementById('post-id-dislike').value = PostID
     }
 
-
+    window.onload = function() {
+        const commentTextArea = document.getElementById('comment-text-area');
+        if (commentTextArea) {
+            commentTextArea.focus();
+            commentTextArea.setSelectionRange(0, 0); // Установка курсора в начало
+        }
+    }
     
 
     // Если post-id отсутствует, вы можете обрабатывать это соответствующим образом

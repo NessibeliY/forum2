@@ -69,10 +69,7 @@
                                             class="border border-neutral-500 my-2 rounded py-2 px-2" 
                                             placeholder="description"
                                             id="description"
-                                            name="description"
-                                        >
-                                            {{.Post.Description}}
-                                        </textarea>
+                                            name="description">{{ .Post.Description }}</textarea>
                                         <label class="text-red-600 my-2"> {{ .ErrorMessages.Description }}</label>
                                     </div>
                                     <div style="display: flex; justify-content: start;">
@@ -93,4 +90,13 @@
         </div>
     </main>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const descriptionField = document.getElementById("description");
+        if (descriptionField) {
+            descriptionField.focus();
+            descriptionField.setSelectionRange(0, 0); // Set cursor to the start
+        }
+    });
+</script>
 </html>

@@ -112,7 +112,7 @@ func (p *PostService) GetPostsDislikedByUser(userID string) ([]models.Post, erro
 	return p.PostRepo.GetPostsDislikedByUser(userID) //nolint:wrapcheck
 }
 
-func (p *PostService) GetPostByPostID(postID string) (*models.Post, error) {
+func (p *PostService) GetPostByPostID(postID string) (models.Post, error) {
 	return p.PostRepo.GetPostByPostID(postID) //nolint:wrapcheck
 }
 
@@ -131,7 +131,7 @@ func (p *PostService) PopulatePostData(postID string, data *models.Login) error 
 	if err != nil {
 		return fmt.Errorf("get post by post id: %w", err)
 	}
-	data.Post = *post
+	data.Post = post
 
 	return nil
 }

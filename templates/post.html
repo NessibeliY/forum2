@@ -32,11 +32,10 @@
             
             <!-- IF USER AUTH SHOW THIS BLOCK -->
             <div class="middleContainer">
-                <div class="flex_full_col" style="margin-bottom: 0.75 rem;">
+                <div class="flex w-full flex-col break-words">
                     <h2 class="postName">{{.Post.Title}}</h2>
                     <span class="postDescription">{{.Post.Description}}</span>
                 </div>
-
                 <div class="flex w-full items-center">
                     <form action="/like" method="POST" class="flex my-2 mb-2">   
                         <input type="hidden" name="PostID" value="{{.Post.PostID}}">
@@ -68,7 +67,7 @@
                 <!-- INPUT COMMENT -->
                 <div class="flex flex-col mb-4">
                     {{if .IsAuth}}
-                    <form class="flex_full_col" style="align-items: center;" action="/add-comment/" method="POST">
+                    <form class="flex_full_col" style="align-items: center;" action="/post/comment" method="POST">
                         <input type="hidden" name="post-id" id="PostID">
                         <div class="flex_full_col ">
                             <textarea

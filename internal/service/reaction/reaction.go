@@ -204,6 +204,10 @@ func (r *ReactionService) RemoveCommentByCommentID(commentID string) error {
 	return r.ReactionRepo.RemoveCommentByCommentID(commentID) //nolint:wrapcheck
 }
 
+func (r *ReactionService) CommentExists(commentID string) bool {
+	return r.ReactionRepo.CommentExistsByCommentID(commentID)
+}
+
 func (r *ReactionService) CreateLikeInComment(reaction *models.CommentLike) error {
 	id, err := uuid.NewV4()
 	if err != nil {

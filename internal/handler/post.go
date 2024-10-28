@@ -102,11 +102,16 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	PostID := r.FormValue("PostID")
+	postID := r.FormValue("PostID")
+
+	if !h.postExists(postID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "post doesn't exist")
+		return
+	}
 
 	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
-	isLiked := h.service.ReactionService.IsPostLikedByUser(PostID, session.UserID)
+	isLiked := h.service.ReactionService.IsPostLikedByUser(postID, session.UserID)
 	if isLiked {
 		http.Redirect(w, r, currentPath, http.StatusSeeOther)
 		return
@@ -121,7 +126,7 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 
 	newLike := models.Like{
 		LikeID: id.String(),
-		PostID: PostID,
+		PostID: postID,
 		UserID: session.UserID,
 	}
 
@@ -132,14 +137,14 @@ func (h *Handler) Like(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.ReactionService.RemovePostDislike(PostID, session.UserID)
+	err = h.service.ReactionService.RemovePostDislike(postID, session.UserID)
 	if err != nil {
 		h.logger.Errorf("remove like: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
-	err = h.service.PostService.IncrementPostLikeCount(PostID)
+	err = h.service.PostService.IncrementPostLikeCount(postID)
 	if err != nil {
 		h.logger.Errorf("increment post like count: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
@@ -161,11 +166,16 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	PostID := r.FormValue("PostID")
+	postID := r.FormValue("PostID")
+
+	if !h.postExists(postID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "post doesn't exist")
+		return
+	}
 
 	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
-	isDisliked := h.service.ReactionService.IsPostDislikedByUser(PostID, session.UserID)
+	isDisliked := h.service.ReactionService.IsPostDislikedByUser(postID, session.UserID)
 	if isDisliked {
 		http.Redirect(w, r, currentPath, http.StatusSeeOther)
 		return
@@ -180,7 +190,7 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 
 	newDislike := models.Dislike{
 		DislikeID: id.String(),
-		PostID:    PostID,
+		PostID:    postID,
 		UserID:    session.UserID,
 	}
 
@@ -191,14 +201,14 @@ func (h *Handler) DisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.ReactionService.RemovePostLike(PostID, session.UserID)
+	err = h.service.ReactionService.RemovePostLike(postID, session.UserID)
 	if err != nil {
 		h.logger.Errorf("remove like: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
-	err = h.service.PostService.IncrementPostDislikeCount(PostID)
+	err = h.service.PostService.IncrementPostDislikeCount(postID)
 	if err != nil {
 		h.logger.Errorf("increment post dislike count: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Server Error")
@@ -287,8 +297,14 @@ func (h *Handler) AddComment(w http.ResponseWriter, r *http.Request) {
 				h.ErrorHandler(w, http.StatusInternalServerError, "Status Internal Server Error")
 				return
 			}
+
 			postID := r.Form.Get("post-id")
 			commentText := strings.TrimSpace(r.Form.Get("comment_text"))
+
+			if !h.postExists(postID) {
+				h.ErrorHandler(w, http.StatusBadRequest, "post doesn't exist")
+				return
+			}
 
 			re := regexp.MustCompile(`^\s*$`)
 			currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
@@ -341,8 +357,15 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 		h.logger.Errorf("parse form: %v", err)
 		h.ErrorHandler(w, http.StatusBadRequest, "Bad Request")
 	}
+
 	commentID := r.FormValue("CommentID")
-	postID := r.FormValue("PostID")
+
+	if !h.service.ReactionService.CommentExists(commentID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "comment doesn't exist")
+		return
+	}
+
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
 	err = h.service.ReactionService.HandleCommentLike(session.UserID, commentID)
 	if err != nil {
@@ -351,7 +374,7 @@ func (h *Handler) CommentLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/post/?post-id=%s", postID), http.StatusSeeOther)
+	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
 
 func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
@@ -367,7 +390,13 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 	}
 
 	commentID := r.FormValue("CommentID")
-	postID := r.FormValue("PostID")
+
+	if !h.service.ReactionService.CommentExists(commentID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "comment doesn't exist")
+		return
+	}
+
+	currentPath := strings.TrimPrefix(r.Header.Get("Referer"), r.Header.Get("Origin"))
 
 	err := h.service.ReactionService.HandleCommentDislike(session.UserID, commentID)
 	if err != nil {
@@ -376,7 +405,7 @@ func (h *Handler) CommentDisLike(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/post/?post-id=%s", postID), http.StatusSeeOther)
+	http.Redirect(w, r, currentPath, http.StatusSeeOther)
 }
 
 func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
@@ -398,16 +427,21 @@ func (h *Handler) DeletePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	PostID := r.FormValue("PostID")
+	postID := r.FormValue("PostID")
 
-	err = h.service.PostService.DeletePostByPostID(PostID)
+	if !h.postExists(postID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "post doesn't exist")
+		return
+	}
+
+	err = h.service.PostService.DeletePostByPostID(postID)
 	if err != nil {
 		h.logger.Errorf("delete post by post_id: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Sever error")
 		return
 	}
 
-	err = h.service.ReactionService.DeleteReaction(PostID, session.UserID)
+	err = h.service.ReactionService.DeleteReaction(postID, session.UserID)
 	if err != nil {
 		h.logger.Errorf("delete reaction: %v", err)
 		h.ErrorHandler(w, http.StatusInternalServerError, "Internal Sever error")
@@ -444,6 +478,12 @@ func (h *Handler) RemoveCommentByCommentID(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	commentID := r.FormValue("CommentID")
+
+	if !h.service.ReactionService.CommentExists(commentID) {
+		h.ErrorHandler(w, http.StatusBadRequest, "comment doesn't exist")
+		return
+	}
+
 	postID := r.Form.Get("PostID")
 
 	err = h.service.ReactionService.RemoveCommentByCommentID(commentID)

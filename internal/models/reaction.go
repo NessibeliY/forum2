@@ -58,6 +58,7 @@ type ReactionRepository interface {
 	GetCommentsByPostID(id string) ([]Comment, error)
 	RemoveCommentByCommentID(commentID string) error
 	RemoveCommentByPostID(postID string) error
+	CommentExistsByCommentID(commentID string) bool
 	// like in comment
 	AddCommentLike(reaction *CommentLike) error
 	IncrementLikeCountInComment(commentID string) error
@@ -90,6 +91,7 @@ type ReactionService interface {
 	CreateCommentInPost(comment *Comment) error
 	GetCommentsByPostID(postID string) ([]Comment, error)
 	RemoveCommentByCommentID(commentID string) error
+	CommentExists(commentID string) bool
 	// like in comment
 	HandleCommentLike(userID, commentID string) error
 	CreateLikeInComment(reaction *CommentLike) error

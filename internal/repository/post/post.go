@@ -267,3 +267,15 @@ func (p *PostRepo) GetPostsCount() (int, error) {
 	}
 	return totalPosts, nil
 }
+
+func (p *PostRepo) CheckPostByID(postID string) (bool, error) {
+	stmt := `SELECT COUNT(*) FROM posts WHERE post_id = ?`
+	var count int
+
+	err := p.db.QueryRow(stmt, postID).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

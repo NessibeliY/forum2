@@ -40,6 +40,7 @@ type PostRepository interface {
 	GetPostsByCategory(tag string) ([]Post, error)
 	GetPostByPostID(postID string) (Post, error)
 	GetPostsCount() (int, error)
+	CheckPostByID(postID string) (bool, error)
 }
 
 type PostService interface {
@@ -60,6 +61,7 @@ type PostService interface {
 	GetPostByPostID(postID string) (Post, error)
 	GetPostsCount() (int, error)
 	PopulatePostData(postID string, data *Login) error
+	CheckPostByID(postID string) (bool, error)
 }
 
 type Posts struct {

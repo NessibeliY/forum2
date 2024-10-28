@@ -110,6 +110,18 @@ func (r *ReactionRepo) RemoveCommentByCommentID(commentID string) error {
 	return nil
 }
 
+func (r *ReactionRepo) CommentExistsByCommentID(commentID string) bool {
+	stmt := `SELECT comment_id FROM comments WHERE comment_id = ?`
+	row := r.db.QueryRow(stmt, commentID)
+
+	var id string
+	err := row.Scan(&id)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (r *ReactionRepo) RemoveCommentByPostID(postID string) error {
 	stmt := `DELETE from comments WHERE post_id = ?`
 	if _, err := r.db.Exec(stmt, postID); err != nil {

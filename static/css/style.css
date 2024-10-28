@@ -10,6 +10,10 @@ body {
     box-sizing: border-box;
 }
 
+p {
+    overflow-wrap: break-word;
+}
+
 .posts-container {
     max-height: 500px;
 }
@@ -23,9 +27,9 @@ body {
 }
 
 .offset {
-    max-width: 70%;
+    max-width: 1600px;
+    width: 100%;
     margin: 0 auto;
-    width: 80%;
     display: flex;
 }
 
@@ -35,17 +39,12 @@ body {
     box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.04);
 }
 
-.flex_full_col {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
 
 /* HEADER */
 .header {
     display: flex;
     width: 100%;
-    padding: 30px 0 20px;
+    padding: 16px 24px;
     box-shadow: 0px 1px 15px rgba(51, 51, 51, 0.2);
     background-color: #fff;
     position: fixed;
@@ -65,7 +64,7 @@ body {
 
 .auth_bnts {
     display: flex;
-    width: 15%;
+    align-items: center;
 }
 
 .btn_auth {
@@ -74,8 +73,8 @@ body {
     padding: 1rem 1rem;    
     justify-content: center;
     align-items: center;
-    width: 50%;
-    min-width: fit-content;
+    /* width: 50%; */
+    /* min-width: fit-content; */
     border-radius: 0.5rem; 
     transition: 0.3s; 
     text-decoration: none;     
@@ -250,15 +249,14 @@ body {
 /* CREATE POST */
 
 .create_container  {
-    margin-top: 5%;
-        background-color: white;  
-        padding: 2% 3%;
-        display: flex;             
-        align-items: center;       
-        justify-content: space-between; 
-        border-radius: 0.5rem;     
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-        margin-bottom: 1.25rem;    
+    background-color: white;  
+    padding: 2% 3%;
+    display: flex;             
+    align-items: center;       
+    justify-content: space-between; 
+    border-radius: 0.5rem;     
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 1.25rem;    
 }
 
 .create_post {
@@ -274,30 +272,20 @@ body {
     width: 100%;
 }
 
-.btn_create {
-    margin-right: 3%;
-    width: 30%;
-}
 
 .tags {
-    position: relative;
-    padding: 2rem;
+    padding: 1rem 2rem;
     background-color: #748d92;
-    margin: 5rem 0.5rem;
     width: 17%;
     height: 500px;
-    min-width: fit-content;
     border-radius: 1rem;
     border-color: rgba(0, 0, 0, 0.175);
     box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.04);
 }
 
 .tags h3 {
-    position: absolute; 
-    top: -4rem;
-    padding: 0 0.5rem; 
-    font-size: xx-large;
-    left: 0;
+    margin-right: 8px;
+    font-size: 24px;
     font-weight: bold; 
 }
 
@@ -314,15 +302,13 @@ body {
 }
 
 .rSide {
-    padding: 5rem 0;
     width: 25%;
 }
 
 .userInfo {
     width: 100%;
     height: 16rem;   
-    background-color: #ffffff;
-    margin-top: 5%; 
+    background-color: #ffffff; 
 }
 
 .post_header {
@@ -414,7 +400,6 @@ h3 {
     display: flex;
     width: 100%;
     margin-bottom: 16px;
-    min-width: fit-content;
 }
 
 .postsTitle {
@@ -465,16 +450,14 @@ h2 {
 
 .postDescription {
     color: white;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: clamp(0.875rem, 0.7944rem + 0.2581vw, 1.375rem);
     font-weight: 500;
     margin: 3% 0;
     width: 75%;
 }
 
 .middleContainer {
-    width: 70%;
-    padding: 5rem 0.5rem;
+    width: 60%;
     margin: 0 4%;
     display: flex;
     flex-direction: column;
@@ -524,7 +507,7 @@ h2 {
     font-family: 'Montserrat';
     font-weight: 800;
     color: white;
-    font-size: xx-large;
+    font-size: clamp(0.875rem, 0.7742rem + 0.3226vw, 1.5rem);
     border-radius: 10px;
     padding-bottom: 15px;
 }
@@ -585,15 +568,40 @@ h2 {
     font-size: x-large;
 }
 
-@media only screen and (max-width: 1024px) {
- 
-    .header{
-        padding-right: 20px;
-    }
+@media (max-width: 1600px) {
     .offset {
+        max-width: 1480px;
+    }
+
+    .middleContainer{
+        width: 55%;
+    }
+}
+
+
+@media (max-width: 1480px) {
+    .offset {
+        max-width: 1200px;
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .offset {
+        max-width: 1024px;
+    }
+
+    .middleContainer{
+        width: 52%;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+     .offset {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
+      padding: 0px 2%;
     }
 
     .rSide{
@@ -609,19 +617,21 @@ h2 {
         font-size: 1.5rem;
     }
 
+
     .tags{
         display: flex;
         flex-direction: row;
         height: auto;
         flex-wrap: wrap;
-        margin: 6rem 0.5rem 3.5rem 0.5rem;
+        margin: 24px 0px;
+
+        width: 100%;
     }
 
     .tags > form {
         margin-right: 4px;
     }
     .middleContainer{
-        padding: 0px 2%;
         width: 100%;
     }
 

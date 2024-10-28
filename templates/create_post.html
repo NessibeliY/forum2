@@ -20,17 +20,18 @@
         <div class="offset" style="justify-content: space-between;">
                 <!--LIST OF TAGS  -->
                    <!--LIST OF TAGS  -->
-                   <div class="tags card">
+                <div class="flex w-full justify-between ">
+                <div class="tags card">
                     <h3 class="font-semibold">Tags</h3>
                     {{range .Categories}}
                     <form action="/user/posts/" method="GET" class="flex">
                         <input type="hidden" name="filter" value="{{.CategoryName}}">
                         <button class="categories" type="submit">#{{.CategoryName}}</button>
                     </form>
-                {{end}}
+                    {{end}}
                 </div>
-                <div class="create_container" style="width: 50%;">     
-                        <div style="width: 100%">
+                <div class="create_container w-6/12	">     
+                        <div class="flex w-full flex-col">
                                 <div class="flex items-center justify-between w-full">
                                     <span class="text-bold text-2xl">CREATE POST</span>
                                 </div>
@@ -86,7 +87,8 @@
                         {{ template "user_info" .}}
                     </div>
                 </div>
-                {{end}}       
+                {{end}} 
+                </div>    
         </div>
     </main>
 </body>

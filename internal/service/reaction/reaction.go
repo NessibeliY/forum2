@@ -92,11 +92,11 @@ func (r *ReactionService) HandlePostLike(userID, postID string) error {
 }
 
 func (r *ReactionService) AddPostLike(newLike models.Like) error {
-	return r.ReactionRepo.AddPostLike(newLike)
+	return r.ReactionRepo.AddPostLike(newLike) //nolint:wrapcheck
 }
 
 func (r *ReactionService) RemovePostLike(postID, userID string) error {
-	return r.ReactionRepo.RemovePostLike(postID, userID)
+	return r.ReactionRepo.RemovePostLike(postID, userID) //nolint:wrapcheck
 }
 
 func (r *ReactionService) HandlePostDislike(userID, postID string) error {
@@ -130,7 +130,7 @@ func (r *ReactionService) HandlePostDislike(userID, postID string) error {
 }
 
 func (r *ReactionService) AddPostDislike(newDislike models.Dislike) error {
-	return r.ReactionRepo.AddPostDislike(newDislike)
+	return r.ReactionRepo.AddPostDislike(newDislike) //nolint:wrapcheck
 }
 
 func (r *ReactionService) DeleteReaction(postID, userID string) error {

@@ -274,7 +274,7 @@ func (p *PostRepo) CheckPostByID(postID string) (bool, error) {
 
 	err := p.db.QueryRow(stmt, postID).Scan(&count)
 	if err != nil {
-		return false, err
+		return false, err //nolint:wrapcheck
 	}
 
 	return count > 0, nil

@@ -95,7 +95,7 @@ func ValidatePassword(v *validator.Validator, password string) {
 
 func ValidateSignupRequest(v *validator.Validator, u *SignupRequest) {
 	v.Check(u.Username != "", "username", "must be provided")
-	v.Check(len(u.Username) > 3, "username", "username must be at least 3 characters long")
+	v.Check(len(u.Username) >= 3, "username", "username must be at least 3 characters long")
 
 	ValidateEmail(v, u.Email)
 	ValidatePassword(v, u.Password)

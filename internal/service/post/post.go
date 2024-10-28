@@ -139,7 +139,7 @@ func (p *PostService) PopulatePostData(postID string, data *models.Login) error 
 func (p *PostService) CheckPostByID(postID string) (bool, error) {
 	exist, err := p.PostRepo.CheckPostByID(postID)
 	if err != nil {
-		return exist, err
+		return exist, err //nolint:wrapcheck
 	}
 
 	return exist, nil

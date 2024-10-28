@@ -115,11 +115,7 @@ func (r *ReactionRepo) CommentExistsByCommentID(commentID string) bool {
 	row := r.db.QueryRow(stmt, commentID)
 
 	var id string
-	err := row.Scan(&id)
-	if err != nil {
-		return false
-	}
-	return true
+	return row.Scan(&id) == nil
 }
 
 func (r *ReactionRepo) RemoveCommentByPostID(postID string) error {
